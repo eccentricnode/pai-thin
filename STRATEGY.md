@@ -1,9 +1,44 @@
 # pai-thin — Strategy & Fork Plan
 
-**Date:** 2026-05-27
-**Status:** DRAFT — pre-fork, pre-commit
+**Date:** 2026-05-27 (scope locked 2026-05-28)
+**Status:** SCOPE LOCKED — P0 committed, v0.1 = audit only
 **Author:** Austin (with Jeff)
 **Successor to:** This session's PAI-vs-CC audit (in conversation transcript)
+**Base:** upstream HEAD `2fde1bb` (2026-05-20), verified fresh 2026-05-28
+
+---
+
+## v0.1 Definition of Done (LOCKED 2026-05-28)
+
+> Four scope decisions, answered directly. These supersede any conflicting detail
+> below — in particular the "Target structure" and P2–P8 phases describe work that
+> is **post-v0.1**, not part of v0.1.
+
+1. **Artifact: the repo is the deliverable.** pai-thin v0.1 is a curated, public-safe
+   thin package living in this repo. The live `~/.claude` is **not touched** in v0.1 —
+   in-place refactor of the daily driver is a separate, later effort.
+2. **v0.1 = audit only.** The single v0.1 deliverable is a trustworthy, committed
+   `MANIFEST.yaml` classifying every meaningful unit of the fresh upstream tree as
+   KEEP / REBUILD / DELETE / ADD / FIX, each with rationale + citation to STRATEGY/DIVERGENCE.
+   **No files in the tree are modified.** Decisions are captured; execution is deferred.
+3. **Prior audit discarded.** The earlier gitignored `MANIFEST.yaml` (a Ralph P1 that ran
+   ahead of scope agreement) is discarded. Regenerate clean against the fresh tree.
+4. **Executor: Ralph / `codex exec`** (no Forge agent), per the validated job-crm pattern.
+
+**Audit decomposition (size-bound, not per-file across 12.4K files):**
+
+| Surface | Files | Unit | Method |
+|---|---|---|---|
+| `Releases/` | 10,488 | 1 bulk verdict | Frozen historical snapshots (v2.3→v5.0.0) — single decision, not per-file |
+| `Packs/` | 1,850 in **54 packs** | 1 verdict per pack (+ notable per-file exceptions) | Ralph loop: one `codex exec` per pack, fresh context, append fragment |
+| Top-level + `Tools/` + `.github/` + `images/` | ~50 | direct | Audit in-session (small, no loop needed) |
+
+**Manifest contract (every entry):** `path`, `unit` (file|pack|tree), `verdict`
+(KEEP|REBUILD|DELETE|ADD|FIX), `rationale` (why, grounded in CC-native equivalence),
+`cite` (STRATEGY.md/DIVERGENCE.md section), `confidence` (HIGH|MED|LOW).
+
+**v0.1 ships when:** every unit above has a verdict, `MANIFEST.yaml` is tracked + committed,
+and a distribution summary (counts per verdict) is at the top of the file.
 
 ---
 

@@ -1,0 +1,38 @@
+# pai-thin audit catalog — v0.1 deliverable
+#
+# Classifies every meaningful unit of the fresh upstream tree (base 2fde1bb, 2026-05-20)
+# against STRATEGY.md categories. Audit-only: no tree files are modified.
+#
+# Decomposition (size-bound, see STRATEGY.md § v0.1 Definition of Done):
+#   - Releases/ (10,488 files) → 1 bulk verdict (seeded below)
+#   - Packs/ (1,850 files / 54 packs) → 1 verdict per pack, Ralph loop
+#   - top-level + Tools/ + .github/ + images/ → direct
+#
+# Entry shape: path | unit(file|pack|tree) | verdict(KEEP|REBUILD|DELETE|ADD|FIX)
+#              | rationale | cite | confidence(HIGH|MED|LOW)
+
+schema_version: 2
+generated_against: "upstream HEAD 2fde1bb (2026-05-20), verified fresh 2026-05-28"
+generated_by: "ralph-P1 (regenerated clean after scope lock)"
+
+# Distribution summary — updated as the audit fills in.
+summary:
+  total_units: 1        # grows as packs + top-level land
+  keep: 0
+  rebuild: 0
+  delete: 1
+  add: 0
+  fix: 0
+  packs_audited: 0      # of 54
+
+units:
+  - path: Releases/
+    unit: tree
+    verdict: DELETE
+    rationale: >-
+      Frozen historical PAI release snapshots (v2.3 through v5.0.0, plus Pi) — 10,488
+      files. pai-thin is a curated thin package that ships only the current system;
+      carrying upstream's release archive is the opposite of thin and adds no value to
+      a CC-native variant. Historical releases remain available upstream.
+    cite: "STRATEGY.md § Anti-scope; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH

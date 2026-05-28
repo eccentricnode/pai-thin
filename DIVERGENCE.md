@@ -2,8 +2,8 @@
 
 > A catalog of every meaningful divergence between `pai-thin` and [`danielmiessler/Personal_AI_Infrastructure`](https://github.com/danielmiessler/Personal_AI_Infrastructure). Updated on every change that diverges from upstream.
 
-**Last upstream sync:** commit `11b75a0` (Revise funding model details in FUNDING.yml)
-**Last reviewed:** 2026-05-27
+**Last upstream sync:** commit `2fde1bb` (Fix Pulse→PULSE directory casing, 2026-05-20) — verified fresh 2026-05-28
+**Last reviewed:** 2026-05-28
 
 ---
 
