@@ -17,13 +17,13 @@ generated_by: "ralph-P1 (regenerated clean after scope lock)"
 
 # Distribution summary — updated as the audit fills in.
 summary:
-  total_units: 1        # grows as packs + top-level land
-  keep: 0
-  rebuild: 0
-  delete: 1
-  add: 0
-  fix: 0
-  packs_audited: 0      # of 54
+  total_units: 76       # 52 packs + Releases/ tree + 23 top-level/Tools/.github/images
+  keep: 47
+  rebuild: 10
+  delete: 3
+  add: 6
+  fix: 10
+  packs_audited: 52     # of 52 (complete)
 
 units:
   - path: Releases/
@@ -36,3 +36,962 @@ units:
       a CC-native variant. Historical releases remain available upstream.
     cite: "STRATEGY.md § Anti-scope; STRATEGY.md § Design principles (CC first)"
     confidence: HIGH
+  - path: Packs/Agents
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      CC native subagents and Task cover execution and persisted agent definitions, but
+      they do not natively compose task-specific workers from reusable traits, voice/prosody
+      mappings, colors, and saved personality profiles; that composition layer is unique PAI
+      value. Verdict is FIX rather than KEEP because src/Tools/SpawnAgentWithProfile.ts
+      imports a removed AgentProfileLoader, and src/Tools/LoadAgentContext.ts points at
+      ~/.claude/Skills/Agents while the installer and docs use ~/.claude/skills/Agents.
+      The SpawnParallelAgents workflow is mostly native Task guidance and can be thinned
+      later, but the trait/voice composition files remain the load-bearing exception.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/ApertureOscillation
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      ApertureOscillation is already grounded as a native Claude Code skill, and
+      its core value is a PAI-specific three-pass scope-framing method rather than
+      a wrapper around a CC-native feature. Claude Code has no built-in equivalent
+      for holding a tactical target constant while oscillating between local and
+      strategic frames to surface design tensions. Per-file exception: src/SKILL.md
+      still includes an execution-log snippet that writes to PAI's custom MEMORY
+      JSONL path, which should be removed or rebuilt with native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Aphorisms
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Aphorisms is already packaged as a native Claude Code skill, and its core
+      value is a curated quote database plus workflows for thematic matching,
+      source-aware addition, thinker research, and newsletter usage tracking.
+      Claude Code has no native equivalent for this domain-specific collection or
+      recommendation procedure. Per-file exceptions: src/SKILL.md and the workflow
+      files still mandate Pulse voice notifications, and src/SKILL.md appends to
+      PAI's custom MEMORY execution log; those scaffolding pieces should be deleted
+      or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/Apify
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Apify is already packaged as a native Claude Code skill, and its core value is
+      a code-first wrapper around Apify actors for social, business, ecommerce, and
+      web scraping with filtering before results enter model context. Claude Code can
+      run code and use MCP tools, but it has no native Apify actor catalog or token-
+      sparing scraping API equivalent. Per-file exceptions: src/SKILL.md and
+      src/Workflows/Update.md still mandate Pulse voice notifications, and
+      src/SKILL.md appends to PAI's custom MEMORY execution log; those scaffolding
+      pieces should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Art
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Art is already packaged as a native Claude Code skill, and its core value is
+      a domain-specific visual production system: named workflows, prompt templates,
+      reference examples, image API adapters, thumbnail composition, and background
+      removal guidance. Claude Code can run shell tools and call external services,
+      but it has no native equivalent for this curated art-direction layer. Per-file
+      exceptions: src/SKILL.md and workflows still require Pulse voice notifications
+      and custom MEMORY logging, several workflows reference legacy PAI tool paths,
+      and src/Tools/GeneratePrompt.ts is explicitly deprecated pending rewrite.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/ArXiv
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      ArXiv is already packaged as a native Claude Code skill, and its core value is
+      a domain-specific research workflow for arXiv search, latest-paper browsing,
+      single-paper deep dives, arXiv Atom parsing, and AlphaXiv enrichment. Claude Code
+      can fetch URLs and run shell commands, but it has no native equivalent for this
+      curated arXiv query/category mapping and paper triage procedure. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding, and
+      src/SKILL.md still references legacy PAI customization and custom MEMORY execution
+      logging paths that should be removed or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/AudioEditor
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      AudioEditor is already packaged as a native Claude Code skill, and its core
+      value is a domain-specific audio cleanup pipeline that combines Whisper
+      word timestamps, LLM edit classification, ffmpeg cut execution, preview
+      mode, and optional Cleanvoice polish; Claude Code has no native equivalent
+      for that end-to-end editing workflow. Verdict is FIX rather than KEEP because
+      src/Tools/Analyze.ts imports the legacy PAI/TOOLS/Inference.ts wrapper, which
+      is not present in the Packs tree and should be replaced with a CC-native or
+      local model-call primitive. Per-file exceptions: src/SKILL.md and
+      src/Workflows/Clean.md still mandate Pulse voice notifications, and
+      src/SKILL.md appends to PAI's custom MEMORY execution log; those scaffolding
+      pieces should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/BeCreative
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      BeCreative is already packaged as a native Claude Code skill, and its core
+      value is a research-backed divergent-ideation method: Verbalized Sampling,
+      workflow routing, Tree of Thoughts variants, and VS-Multi synthetic corpus
+      expansion. Claude Code can think and write creatively, but it has no native
+      equivalent for this curated creativity protocol or corpus-expansion procedure.
+      Per-file exceptions: src/SKILL.md and the workflow files still mandate Pulse
+      voice notifications, src/SKILL.md and SyntheticDataExpansion write to custom
+      PAI MEMORY paths, and TechnicalCreativityGemini3 depends on an external Gemini
+      CLI workflow that may need native-tooling review later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/BitterPillEngineering
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      BitterPillEngineering is already packaged as a native Claude Code skill, and
+      its core value is a prompt-hygiene audit method for identifying over-prompting,
+      cross-file contradiction, redundant rules, vague instructions, and load-path
+      waste. Claude Code can follow instructions and read settings files, but it has
+      no native equivalent for this curated instruction-audit workflow or its
+      Five Questions classification scheme. Per-file exceptions: src/SKILL.md still
+      mandates Pulse voice notifications, reads PAI user-customization paths, and
+      appends to PAI's custom MEMORY execution log; those scaffolding pieces should
+      be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/BrightData
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      BrightData is already packaged as a native Claude Code skill, and its core
+      value is a cost-aware progressive scraping and crawling workflow that escalates
+      from CC-native WebFetch through curl, browser automation, and Bright Data MCP/API
+      only when needed. Claude Code provides WebFetch, Bash, and MCP plumbing, but it
+      has no native equivalent for this curated bot-detection bypass, crawl-scope,
+      and cost-control procedure. Per-file exceptions: INSTALL.md and VERIFY.md are
+      generic pack-install scaffolding, while src/SKILL.md and FourTierScrape.md still
+      mandate Pulse voice notifications and src/SKILL.md appends to PAI's custom
+      MEMORY execution log; those scaffolding pieces should be deleted or rebuilt on
+      native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Browser
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Browser is already packaged as a native Claude Code skill, and its core
+      value is a curated agent-browser workflow layer for persistent auth profiles,
+      batch headless browser actions, screenshots, recipes, and YAML story validation.
+      Claude Code has WebFetch, Bash, and Task agents, but no native equivalent for
+      this reusable authenticated browser-automation layer. Verdict is FIX rather
+      than KEEP because src/SKILL.md deprecates BrowserAgent and UIReviewer, while
+      src/Recipes/SummarizePage.md plus the Automate, ReviewStories, and Update
+      workflows still route work through those deprecated agents; INSTALL.md and
+      VERIFY.md are generic pack scaffolding, and the Pulse/custom MEMORY hooks should
+      be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/ContentAnalysis
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      ContentAnalysis is already packaged as a native Claude Code skill, and its
+      core value is a content-adaptive wisdom extraction method with dynamic
+      section detection, depth levels, conversational tone rules, and an explicit
+      quality gate. Claude Code can fetch, read, and summarize content, but it has
+      no native equivalent for this curated extract_wisdom successor workflow.
+      Per-file exceptions: INSTALL.md and VERIFY.md are generic pack-install
+      scaffolding, while ExtractWisdom still references legacy PAI user
+      customization and writing-style paths and suggests fabric for YouTube
+      transcripts; those support details should be thinned or reviewed later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/ContextSearch
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      ContextSearch provides a curated prior-work recovery workflow that searches
+      Claude Code conversation history, current-project git history, native project
+      memory files, and optional PAI session stores before synthesizing usable task
+      context. Claude Code exposes the underlying history, memory, file, and shell
+      primitives, but it has no native equivalent for this single-command,
+      multi-source context search or its standalone/paired usage modes. Per-file
+      exceptions: src/commands/context-search.md and src/commands/cs.md are legacy
+      slash-command definitions rather than native skill-form packaging, and their
+      PAI MEMORY/WORK sources depend on the memory subsystem planned for native
+      rebuild.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Council
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Council is already packaged as a native Claude Code skill, and its core
+      value is a curated multi-agent debate method with topic-specific composed
+      council members, round-by-round friction, visible transcripts, and synthesis.
+      Claude Code provides Task/subagent execution primitives, but it has no native
+      equivalent for this collaborative-adversarial deliberation workflow. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      while src/SKILL.md and the workflow files still mandate Pulse voice
+      notifications and src/SKILL.md appends to PAI's custom MEMORY execution log;
+      those scaffolding pieces should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/CreateCLI
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      CreateCLI is already packaged as a native Claude Code skill, and its core
+      value is a curated TypeScript CLI generation system with tier selection,
+      llcli-style templates, extension and migration workflows, and production
+      quality gates. Claude Code can write files and run build tools, but it has
+      no native equivalent for this reusable CLI-first architecture playbook.
+      Per-file exceptions: INSTALL.md and VERIFY.md are generic pack-install
+      scaffolding, while src/SKILL.md and workflow files still mandate Pulse voice
+      notifications, custom MEMORY logging, and PAI-specific generated paths/config
+      conventions that should be deleted or thinned later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/CreateSkill
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      CreateSkill is already packaged as a native Claude Code skill, and its core
+      value is a curated lifecycle for creating, validating, testing, improving,
+      canonicalizing, and trigger-optimizing skills. Claude Code provides the native
+      skill substrate, but it has no native equivalent for this skill-authoring
+      quality system or its with-skill versus baseline evaluation workflow. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      src/SKILL.md and workflows still mandate Pulse voice notifications and custom
+      MEMORY logging, and CanonicalizeSkill/UpdateSkill reference older PAI skill
+      documentation paths that should be thinned or corrected later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Daemon
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      Daemon's public-profile aggregator and deterministic security filter are useful
+      PAI-specific functionality with no direct Claude Code native equivalent. The
+      implementation should be rebuilt because DaemonAggregator.ts is grounded in
+      PAI's parallel MEMORY/WORK, KNOWLEDGE, TELOS, and PROJECTS substrate that
+      pai-thin plans to replace with CC auto-memory topic files and path-scoped
+      rules. Per-file exceptions: SecurityFilter.ts and SecurityClassification.md
+      are keep-worthy enforcement assets, while INSTALL.md, VERIFY.md, Pulse
+      notification text, and custom MEMORY execution logging are generic or legacy
+      scaffolding to delete or rebuild on native telemetry.
+    cite: "DIVERGENCE.md § Memory (P3, P5); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Delegation
+    unit: pack
+    verdict: DELETE
+    rationale: >-
+      Delegation is mostly routing guidance for Claude Code native primitives:
+      Task/subagents, worktree isolation, background agents, and TeamCreate-style
+      coordinated teams. That makes the standalone pack wrapper overhead rather
+      than unique PAI value, even though a few heuristics about when to fan out
+      work could be folded into Algorithm or agent guidance later. Per-file
+      exceptions: src/SKILL.md also references the PAI Agents skill and writes
+      custom MEMORY execution logs, while INSTALL.md and VERIFY.md are generic
+      pack-install scaffolding.
+    cite: "STRATEGY.md § Design principles; STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Evals
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Evals is unique PAI value: Claude Code has native skills, Task/subagents,
+      and telemetry surfaces, but no native pass@k/pass^k agent evaluation
+      framework with transcript graders, scenario simulation, suite management,
+      and failure-to-task workflows. Verdict is FIX rather than KEEP because the
+      model-based graders and PAIAgentAdapter import the legacy PAI/TOOLS/Inference.ts
+      wrapper, which is absent from the current pack tree and should be replaced
+      with a pai-thin-native model-call primitive. Per-file exceptions: INSTALL.md
+      and VERIFY.md are generic pack-install scaffolding, while src/SKILL.md and
+      several workflows still mandate Pulse notifications and custom MEMORY logging
+      that should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); DIVERGENCE.md § Divergence categories"
+    confidence: HIGH
+  - path: Packs/ExtractWisdom
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      ExtractWisdom is an opinionated Claude Code skill for adaptive wisdom
+      extraction, with depth levels, dynamic section selection, voice rules,
+      spicy-take preservation, and references/rabbit-hole output. Claude Code can
+      natively read files, fetch pages, and summarize content, but it has no native
+      equivalent for this specific extraction rubric and quality contract. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      while src/SKILL.md still references legacy PAI customization and writing-style
+      paths that should be thinned or redirected later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles"
+    confidence: MED
+  - path: Packs/Fabric
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Fabric is explicitly called out as KEEP because it is a pattern-library
+      wrapper with no native Claude Code equivalent: CC can host skills and read
+      files, but it does not provide Fabric's 240+ curated prompt patterns or
+      pattern-selection workflows. The pack is already mostly re-grounded on
+      native execution by reading Patterns/{name}/system.md directly instead of
+      spawning the fabric CLI for ordinary use. Per-file exceptions: src/SKILL.md
+      and workflows still include Pulse notifications, custom MEMORY execution
+      logging, and ExecutePattern's summarize auto-harvest side effect through
+      _HARVEST; UpdatePatterns also keeps the Fabric CLI as an upstream-sync helper.
+    cite: "STRATEGY.md § keep / native-rebuild / delete sheet; DIVERGENCE.md § Algorithm & Skills (P3)"
+    confidence: HIGH
+  - path: Packs/FirstPrinciples
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      FirstPrinciples is already packaged as a native Claude Code skill, and its
+      core value is a reusable reasoning method for deconstructing problems,
+      challenging soft constraints and assumptions, and reconstructing from hard
+      truths. Claude Code can reason and use skills natively, but it has no
+      built-in equivalent for this specific first-principles workflow and output
+      contract. Per-file exceptions: INSTALL.md and VERIFY.md are generic
+      pack-install scaffolding, while src/SKILL.md and workflow files still
+      mandate Pulse voice notifications and custom MEMORY execution logging that
+      should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Ideate
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Ideate is already packaged as a native Claude Code skill, and its core
+      value is a PAI-specific multi-cycle evolutionary ideation engine with
+      consume, dream, steal, mate, test, evolve, and meta-learn phases. Claude
+      Code can run skills and spawn agents, but it has no native equivalent for
+      this loop controller, structural-randomness protocol, provenance model, or
+      fitness-landscape output. Per-file exceptions: INSTALL.md and VERIFY.md
+      are generic pack-install scaffolding, workflow files still mandate Pulse
+      notifications and custom MEMORY logging/persistence, and Dream.md points
+      to a Daydream.md workflow that is not present in this pack.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Interceptor
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Interceptor is explicitly listed as a PAI-specific skill to keep because
+      Claude Code can run skills and browser-adjacent tools, but it has no
+      native equivalent for controlling the user's real Chrome session through
+      the Interceptor extension, including authenticated-page verification,
+      monitor/replay flows, passive network logs, canvas inspection, and rich
+      editor scene graph workflows. This makes it unique PAI value rather than a
+      wrapper around a native CC primitive. Per-file exceptions: INSTALL.md and
+      VERIFY.md are generic pack-install scaffolding, while src/SKILL.md and
+      workflow files still mandate Pulse voice notifications and custom MEMORY
+      execution logging that should be deleted or rebuilt on native telemetry
+      later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Interview
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Interview is explicitly listed as a PAI-specific skill to keep because its
+      value is a phased conversational review across TELOS, ideal-state,
+      preference, current-state, and identity context with scan-driven ordering
+      and one-question-at-a-time capture. Claude Code can ask questions, edit
+      files, and run native skills, but it has no native equivalent for this PAI
+      context-audit protocol or its TELOS-specific review/fill rules. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      and src/SKILL.md still depends on legacy PAI tools/Pulse paths that may
+      need thinning later without changing the pack-level verdict.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Investigation
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Investigation is already shaped as a native Claude Code skill, and its
+      core value is a curated OSINT and people-finding system: 279 cataloged
+      sources, authorization gates, specialized workflows, parallel research
+      patterns, source attribution, and confidence scoring. Claude Code can run
+      searches, read files, and launch agents, but it has no native equivalent
+      for this structured investigation methodology or ethical source catalog.
+      Per-file exceptions: INSTALL.md and VERIFY.md are generic pack-install
+      scaffolding, while OSINT and PrivateInvestigator instructions still embed
+      Pulse notifications, custom MEMORY paths, and PAI Research/custom-agent
+      assumptions that should be thinned or rebuilt later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles"
+    confidence: MED
+  - path: Packs/IterativeDepth
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      IterativeDepth is already packaged as a native Claude Code skill, and its
+      core value is a PAI-specific multi-lens method for surfacing hidden
+      requirements, anti-criteria, and ISC refinements before execution. Claude
+      Code can reason, use skills, and spawn agents, but it has no native
+      equivalent for this structured 2-8 pass lens protocol or its research-
+      grounded lens catalog. Per-file exceptions: INSTALL.md and VERIFY.md are
+      generic pack-install scaffolding, while src/SKILL.md still references
+      legacy PAI customization and custom MEMORY execution logging that should
+      be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/ISA
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      ISA is explicitly listed as a PAI-specific skill to keep because its core
+      value is the Ideal State Artifact methodology: twelve-section structure,
+      tier completeness gates, stable ISC IDs, deterministic Reconcile, and
+      Scaffold/Interview/CheckCompleteness/Append/Seed workflows. Claude Code
+      natively supports skills, file editing, and questions, but it has no
+      native equivalent for this specification-and-verification primitive or
+      its ID-stable feature-file merge protocol. Per-file exceptions: INSTALL.md
+      and VERIFY.md are generic pack-install scaffolding, while src/SKILL.md
+      and workflow files still embed Pulse voice notifications and legacy
+      ~/.claude/PAI/MEMORY/WORK paths that should be thinned later without
+      changing the pack-level verdict.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Loop
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Loop is unique PAI value because it turns the PAI Algorithm into repeated
+      OBSERVE-to-LEARN cycles with evolving ISC criteria, ISA iteration state,
+      cumulative learning, and human review between passes. Claude Code can
+      continue iterating, run native skills, and use tasks, but it has no native
+      equivalent for this Algorithm/ISA loop controller. Per-file exceptions:
+      INSTALL.md and VERIFY.md are generic pack-install scaffolding, while
+      src/SKILL.md still uses slash-command wording, Algorithm mode, and a legacy
+      PAI/ALGORITHM reference that should be aligned when Algorithm is rebuilt as
+      a native skill.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Knowledge
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      Knowledge's useful idea is a typed, cross-linked knowledge workflow for
+      notes, ingestion ripples, contradiction review, and graph navigation, but
+      the current pack is grounded in PAI's parallel MEMORY/KNOWLEDGE store and
+      custom KnowledgeHarvester, MemoryRetriever, and SessionHarvester tools.
+      Claude Code now has native auto-memory and standard file access, so the
+      archive substrate, harvesting, mining, and retrieval pieces should be
+      rebuilt on native memory/topic-file primitives rather than kept as a
+      separate memory system. Per-file exceptions: INSTALL.md and VERIFY.md are
+      generic pack-install scaffolding, while src/SKILL.md contains the
+      domain-specific typed-linking and contradiction workflows worth carrying
+      forward in the rebuild.
+    cite: "DIVERGENCE.md § Memory (P3, P5); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/Media
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Media is already shaped as a native Claude Code skill, and its core value
+      is a unified visual-production layer: routed Art workflows, image
+      generation adapters, thumbnail composition, and Remotion video guidance
+      that Claude Code does not provide natively. Verdict is FIX rather than
+      KEEP because the Art router and README reference missing BrandWallpaper
+      and AdHocYouTubeThumbnail workflows, and many workflow commands still point
+      at legacy ~/.claude/skills/art or ~/.claude/PAI/Tools paths instead of the
+      Media skill layout. Per-file exceptions: INSTALL.md and VERIFY.md are
+      generic pack-install scaffolding, while the mandatory Pulse notifications
+      and PAI customization paths should be deleted or rebuilt later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/Migrate
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      Migrate's useful value is a bulk intake workflow that chunks external
+      content, routes it into the PAI taxonomy, requires approval for uncertain
+      or sensitive destinations, and preserves provenance; Claude Code has no
+      native equivalent for that migration/classification protocol. The
+      implementation should be rebuilt around native CC auto-memory topic files,
+      path-scoped rules, and standard file tools instead of the parallel
+      MEMORY/KNOWLEDGE store, feedback memory files, and release-only
+      MigrateScan.ts/MigrateApprove.ts commands. Per-file exceptions: INSTALL.md
+      and VERIFY.md are generic pack-install scaffolding, while src/SKILL.md
+      carries the workflow worth preserving but also contains the legacy Pulse,
+      bun, and ~/.claude/PAI path assumptions.
+    cite: "DIVERGENCE.md § Memory (P3, P5); DIVERGENCE.md § CLAUDE.md surgery (P4); STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Optimize
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      Optimize's useful value is an autonomous hill-climbing protocol for code,
+      prompts, skills, and agents using either measurable metrics or LLM-as-judge
+      evals; Claude Code can run commands and edit files, but it has no native
+      equivalent for that optimization loop. The current pack should be rebuilt
+      because src/SKILL.md is framed as a /optimize command that triggers PAI
+      Algorithm mode and depends on ~/.claude/PAI/ALGORITHM reference files,
+      while pai-thin plans to rebuild Algorithm as an explicit native CC skill
+      rather than a mode. Per-file exceptions: README.md, INSTALL.md, and
+      VERIFY.md are generic pack scaffolding, while src/SKILL.md carries the
+      domain workflow worth preserving.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/PrivateInvestigator
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      PrivateInvestigator is already packaged as a native Claude Code skill, and
+      its core value is an ethical public-data people-finding and identity
+      verification methodology with source catalogs, reverse lookup procedures,
+      public-records guidance, and multi-source confidence scoring. Claude Code
+      can search, fetch, and launch Task agents, but it has no native equivalent
+      for this domain-specific OSINT workflow or its stop conditions for
+      harassment, stalking, and non-public data. Per-file exceptions: INSTALL.md
+      and VERIFY.md are generic pack-install scaffolding, while src/SKILL.md and
+      the workflows still mandate Pulse notifications and src/SKILL.md appends to
+      PAI's custom MEMORY execution log; those scaffolding pieces should be
+      deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/PAIUpgrade
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      PAIUpgrade has unique PAI value as a self-improvement and ecosystem
+      monitoring workflow: Claude Code can search, use agents, and run skills,
+      but it has no native equivalent for Thread 0 prior-state gating,
+      source/reflection mining, and prioritized PAI upgrade synthesis. The
+      implementation should be rebuilt because it audits upstream PAI surfaces
+      that pai-thin plans to replace, including the parallel MEMORY tree,
+      SecurityPipeline hooks, slash-command assumptions, Pulse notifications,
+      and PAI Algorithm mode paths. Per-file exceptions: INSTALL.md and
+      VERIFY.md are generic pack scaffolding, while src/Tools/Anthropic.ts and
+      sources.json carry useful source-monitoring logic that should be
+      re-grounded in the native skill layout.
+    cite: "DIVERGENCE.md § Memory (P3, P5); DIVERGENCE.md § Hooks (P3); DIVERGENCE.md § Algorithm & Skills (P3)"
+    confidence: HIGH
+  - path: Packs/Prompting
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Prompting is already shaped as a native Claude Code skill, and Claude Code
+      has no built-in equivalent for this reusable prompt-engineering standards
+      library, Handlebars prompt-template system, and render/validate tooling for
+      generated agent and eval prompts. Verdict is FIX rather than KEEP because
+      the root src/Tools renderers resolve template paths as if templates live at
+      the skill root while the documented Primitives/... examples only line up
+      with src/Templates/Tools, and the pack still includes legacy Pulse
+      notifications plus custom PAI MEMORY execution logging. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      while src/Templates/Tools/index.ts is leftover Bun scaffold rather than
+      Prompting functionality.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/RedTeam
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      RedTeam is already packaged as a Claude Code skill, and its core value is
+      a PAI-specific adversarial-analysis methodology for stress-testing ideas,
+      plans, architecture choices, and competing proposals. Claude Code has
+      native Task agents and skill loading, but no native equivalent for the
+      32-perspective red-team protocol, steelman/counter-argument discipline,
+      and adversarial validation workflow. Per-file exceptions: INSTALL.md and
+      VERIFY.md are generic pack-install scaffolding, while src/SKILL.md and
+      the workflows still contain legacy Pulse notification and custom PAI
+      MEMORY execution-log assumptions that should be deleted or rebuilt later.
+    cite: "STRATEGY.md § keep / native-rebuild / delete sheet; DIVERGENCE.md § Algorithm & Skills (P3)"
+    confidence: HIGH
+  - path: Packs/Remotion
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Remotion is already packaged as a native Claude Code skill, and its core
+      value is a curated programmatic-video production workflow: frame-driven
+      React animation rules, render tooling, PAI theme integration, AI-video
+      pipeline guidance, captions, Lambda rendering, and topic-specific Remotion
+      references. Claude Code can edit files and run Bash commands, but it has
+      no native equivalent for this domain-specific video composition and
+      rendering methodology. Per-file exceptions: INSTALL.md and VERIFY.md are
+      generic pack-install scaffolding, while src/SKILL.md and workflows still
+      mandate Pulse voice notifications, legacy PAI customization paths, and
+      custom MEMORY execution logging that should be deleted or rebuilt on
+      native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/RootCauseAnalysis
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      RootCauseAnalysis is already packaged as a native Claude Code skill, and
+      its core value is a domain-specific incident-investigation methodology:
+      Five Whys, Fishbone/Ishikawa, blameless postmortems, Fault Tree Analysis,
+      Kepner-Tregoe IS/IS-NOT, method selection, and foundation references.
+      Claude Code can read files, run commands, and invoke skills, but it has
+      no native equivalent for this structured RCA decision tree and bias
+      controls. Per-file exceptions: INSTALL.md and VERIFY.md are generic
+      pack-install scaffolding, while src/SKILL.md still mandates Pulse voice
+      notifications, PAI customization paths, and custom MEMORY execution
+      logging that should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Research
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Research is already packaged as a native Claude Code skill, and its core
+      value is a reusable research operating system: depth-based research modes,
+      parallel researcher orchestration, mandatory URL verification, iterative
+      deep-investigation templates, content retrieval, and extraction workflows.
+      Claude Code has native WebSearch/WebFetch and Task agents, but no native
+      equivalent for this domain-specific routing, synthesis, verification, and
+      investigation-vault methodology. Per-file exceptions: INSTALL.md and
+      VERIFY.md are generic pack-install scaffolding, src/SKILL.md requires a
+      legacy Pulse notification, and several workflows still write to PAI
+      MEMORY/History paths or delegate to the separate Fabric skill and should
+      be thinned or rebuilt on native memory/skill primitives later.
+    cite: "STRATEGY.md § keep / native-rebuild / delete sheet; DIVERGENCE.md § Algorithm & Skills (P3)"
+    confidence: HIGH
+  - path: Packs/Sales
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Sales is already packaged as a native Claude Code skill, and its core
+      value is a domain-specific workflow for turning product documentation
+      into sales narratives, emotional registers, charcoal visual concepts,
+      talking points, and script snippets. Claude Code can write pitches and
+      invoke tools, but it has no native equivalent for this curated sales-story
+      and visual-asset pipeline. Verdict is FIX rather than KEEP because the
+      main workflows invoke a standalone StoryExplanation skill that is not
+      present in the audited Packs tree and hard-code ~/.claude/skills/art even
+      though the Art pack installs as Art; per-file exceptions include generic
+      INSTALL.md/VERIFY.md scaffolding plus legacy Pulse notification and custom
+      MEMORY execution-log assumptions in src/SKILL.md.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: MED
+  - path: Packs/Science
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Science is already packaged as a native Claude Code skill, and its core
+      value is a PAI-specific scientific-method protocol: goal-first framing,
+      plural falsifiable hypotheses, experiment design, measurement, analysis,
+      iteration, templates, and cross-skill compliance guidance. Claude Code can
+      reason, run commands, and invoke skills, but it has no native equivalent
+      for this structured evidence-based operating cycle. Per-file exceptions:
+      INSTALL.md and VERIFY.md are generic pack-install scaffolding, while
+      src/SKILL.md still mandates Pulse voice notifications, legacy PAI
+      customization paths, and custom MEMORY execution logging that should be
+      deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Scraping
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Scraping is already packaged as a native Claude Code skill, and its core
+      value is a unified scraping workflow that combines progressive URL
+      escalation with Apify actor wrappers that filter large datasets before
+      they enter model context. Claude Code has WebFetch, Bash, browser
+      automation, and MCP plumbing, but it has no native equivalent for this
+      curated bot-detection escalation, crawl-cost control, social/platform
+      actor catalog, and token-sparing code-first scraping layer. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      while BrightData/SKILL.md, Apify/SKILL.md, Apify/README.md, and
+      Apify/INTEGRATION.md still reference Pulse notifications, legacy PAI
+      customization paths, or filesystem-mcp paths that should be thinned or
+      updated later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Security
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Security is already packaged as native Claude Code skills, and its core
+      value is a domain-specific router across recon, web assessment,
+      prompt-injection testing, security-news triage, and annual-report threat
+      intelligence. Claude Code has native permissions and autoMode hard-deny
+      controls for tool safety, but no native equivalent for these security
+      assessment methodologies, references, workflows, and helper tools. Verdict
+      is FIX rather than KEEP because AnnualReports tools require
+      src/AnnualReports/Data/sources.json, which is not present; per-file
+      exceptions also include generic INSTALL.md/VERIFY.md scaffolding plus
+      legacy Pulse notifications, custom MEMORY paths, and ~/.claude/PAI
+      customization assumptions that should be deleted or rebuilt later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Planned divergences (Hooks)"
+    confidence: HIGH
+  - path: Packs/SystemsThinking
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      SystemsThinking is already packaged as a native Claude Code skill, and
+      its core value is a domain-specific structural-analysis methodology:
+      iceberg analysis, causal loop diagrams, systems archetypes, Meadows'
+      leverage points, and Novak-style concept maps. Claude Code can reason and
+      draw diagrams with tool help, but it has no native equivalent for this
+      curated systems-thinking workflow and reference corpus. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack-install scaffolding,
+      while src/SKILL.md still mandates Pulse voice notifications, legacy
+      ~/.claude/PAI customization paths, and custom MEMORY execution logging
+      that should be deleted or rebuilt on native primitives later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Telos
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      Telos preserves useful PAI methodology for life context, project dependency
+      analysis, interview extraction, narrative generation, dashboards, and
+      consulting-style reports, but its personal TELOS store duplicates context
+      that pai-thin should ground in CC native auto-memory and path-scoped rules.
+      Claude Code has no native equivalent for the project-analysis workflows or
+      the dashboard/report templates, so those should be kept as skill assets while
+      the ~/.claude/PAI/USER/TELOS and ~/.claude/context/life/telos assumptions are
+      rebuilt. Per-file exceptions: src/Tools/UpdateTelos.ts also appears broken
+      against the documented path and imports legacy hook identity code, and
+      src/SKILL.md still mandates Pulse voice notifications.
+    cite: "DIVERGENCE.md § Memory (P3, P5); DIVERGENCE.md § CLAUDE.md surgery (P4)"
+    confidence: HIGH
+  - path: Packs/Thinking
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      Thinking is already packaged as native Claude Code skills, and its core
+      value is a set of PAI-specific cognitive methodologies: first-principles
+      decomposition, iterative-depth lenses, creative ideation, council debate,
+      red teaming, world-model threat testing, and scientific investigation.
+      Claude Code can reason, use Task agents, and invoke skills, but it has no
+      native equivalent for this curated router, reference corpus, and workflow
+      suite. Per-file exceptions: INSTALL.md and VERIFY.md are generic pack
+      scaffolding, several mode files still mandate Pulse voice notifications
+      and legacy PAI customization paths, WorldThreatModelHarness uses the custom
+      MEMORY world-model store, and TechnicalCreativityGemini3 plus one Science
+      workflow depend on external Gemini/Evals tooling that should be reviewed
+      later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § keep / native-rebuild / delete sheet"
+    confidence: HIGH
+  - path: Packs/USMetrics
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      USMetrics is already packaged as a native Claude Code skill, and its core
+      value is a domain-specific pipeline for fetching federal economic data,
+      maintaining a US-Common-Metrics dataset, calculating multi-horizon trends,
+      and generating cross-metric economic analysis. Claude Code can browse,
+      call APIs with Bash, and use skills, but it has no native equivalent for
+      this curated 68-indicator metric catalog and analysis workflow. Verdict is
+      FIX rather than KEEP because the tools rely on hard-coded Substrate paths
+      and contain reliability issues such as a malformed EIA gas-price query in
+      GenerateAnalysis.ts; per-file exceptions also include generic INSTALL.md
+      and VERIFY.md scaffolding plus legacy Pulse voice notification and
+      ~/.claude/PAI customization assumptions in src/SKILL.md.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Utilities
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      Utilities bundles thirteen already-native-style sub-skills behind a manual
+      routing skill; the underlying workflows include unique PAI value such as
+      Fabric patterns, Evals, Documents/Parser, AudioEditor, Cloudflare, Browser,
+      CreateCLI/CreateSkill, and Aphorisms, but Claude Code's native skill
+      auto-activation already provides the routing primitive this pack centralizes.
+      Rebuild by keeping useful sub-skill assets as independently discoverable
+      native skills and dropping or thinning the top-level dispatcher and generic
+      install scaffolding. Per-file exceptions: Fabric is explicitly KEEP in the
+      strategy, while AudioEditor and Browser inherit the reliability caveats
+      already noted in their standalone pack entries; many sub-skills also carry
+      legacy Pulse notifications, ~/.claude/PAI customization paths, or custom
+      MEMORY assumptions that should be deleted or rebuilt later.
+    cite: "DIVERGENCE.md § Algorithm & Skills (P3); STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/Webdesign
+    unit: pack
+    verdict: FIX
+    rationale: >-
+      Webdesign has unique PAI value as an orchestration bridge around the
+      web-only Claude Design surface through Interceptor; Claude Code's native
+      frontend-design plugin can generate frontend code, but it does not
+      programmatically drive an authenticated claude.ai/design session or process
+      its handoff bundles. Verdict is FIX rather than KEEP because the workflows
+      reference tool verbs and verification modes that the bundled tools do not
+      implement, including upload/adjust/comment/compare/export tokens and
+      lighthouse/compare checks. Per-file exceptions: ProcessHandoffBundle.ts is
+      a self-contained KEEP-grade parser, while INSTALL.md and VERIFY.md are
+      generic pack scaffolding.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/WorldThreatModel
+    unit: pack
+    verdict: REBUILD
+    rationale: >-
+      WorldThreatModel has unique PAI value as a persistent 11-horizon threat-model
+      harness for stress-testing ideas, strategies, and investments; Claude Code has
+      native skills and Task agents, but no built-in equivalent for this curated
+      world-model workflow. The pack should be rebuilt because its core model state
+      lives under PAI's custom MEMORY/RESEARCH/WorldModels tree, which pai-thin plans
+      to replace with CC-native memory/topic-file patterns. Per-file exceptions:
+      INSTALL.md and VERIFY.md are generic pack scaffolding, while src/SKILL.md and
+      workflows still mandate Pulse voice notifications and custom MEMORY execution
+      logging that should be deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Memory (P3, P5); STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+  - path: Packs/WriteStory
+    unit: pack
+    verdict: KEEP
+    rationale: >-
+      WriteStory is already packaged as a native Claude Code skill, and its core
+      value is a curated fiction-writing methodology: seven narrative layers,
+      Storr character-change mechanics, Pressfield structure, rhetorical figures,
+      anti-cliche checks, story-bible construction, and revision workflows. Claude
+      Code can write prose and invoke skills, but it has no native equivalent for
+      this domain-specific reference corpus and workflow suite. Per-file
+      exceptions: INSTALL.md and VERIFY.md are generic pack scaffolding, while
+      src/SKILL.md still mandates Pulse voice notifications, legacy PAI
+      customization paths, and custom MEMORY execution logging that should be
+      deleted or rebuilt on native telemetry later.
+    cite: "DIVERGENCE.md § Divergence categories; STRATEGY.md § Design principles (CC first)"
+    confidence: HIGH
+
+  # --- Top-level files, Tools/, .github/, images/ (direct audit, in-session 2026-05-28) ---
+  - path: README.md
+    unit: file
+    verdict: ADD
+    rationale: "pai-thin rewrote upstream's README into its own differentiated readme (pai-thin vs upstream PAI vs pai-lite). pai-thin-authored content."
+    cite: "STRATEGY.md § Fork & first-commit plan"
+    confidence: HIGH
+  - path: STRATEGY.md
+    unit: file
+    verdict: ADD
+    rationale: "pai-thin-only design/strategy doc with the v0.1 Definition of Done. No upstream equivalent."
+    cite: "STRATEGY.md § v0.1 Definition of Done"
+    confidence: HIGH
+  - path: DIVERGENCE.md
+    unit: file
+    verdict: ADD
+    rationale: "pai-thin-only divergence catalog. No upstream equivalent."
+    cite: "DIVERGENCE.md (self)"
+    confidence: HIGH
+  - path: MANIFEST.yaml
+    unit: file
+    verdict: ADD
+    rationale: "This audit catalog itself — pai-thin v0.1 deliverable. No upstream equivalent."
+    cite: "STRATEGY.md § v0.1 Definition of Done"
+    confidence: HIGH
+  - path: UPSTREAM_README.md
+    unit: file
+    verdict: ADD
+    rationale: "Preserved copy of upstream's README so the original is not lost after pai-thin's README rewrite. pai-thin-only."
+    cite: "STRATEGY.md § Fork & first-commit plan"
+    confidence: HIGH
+  - path: .github/UPSTREAM_SYNC.md
+    unit: file
+    verdict: ADD
+    rationale: "pai-thin-only upstream-pull procedure (PAI has no native upstream-sync). No upstream equivalent."
+    cite: "STRATEGY.md § Open questions (upstream-pull mechanism)"
+    confidence: HIGH
+  - path: LICENSE
+    unit: file
+    verdict: KEEP
+    rationale: "Upstream license, unchanged. Fork retains it."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: SECURITY.md
+    unit: file
+    verdict: KEEP
+    rationale: "Upstream security policy doc; still accurate as policy. No change planned."
+    cite: "STRATEGY.md § Design principles"
+    confidence: MED
+  - path: .gitattributes
+    unit: file
+    verdict: KEEP
+    rationale: "Upstream git attributes, unchanged."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: .gitignore
+    unit: file
+    verdict: KEEP
+    rationale: "Upstream gitignore plus pai-thin's local edits; still correct."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: .env.example
+    unit: file
+    verdict: KEEP
+    rationale: "Env template; harmless scaffold useful to fresh installs."
+    cite: "STRATEGY.md § Design principles"
+    confidence: MED
+  - path: PLATFORM.md
+    unit: file
+    verdict: KEEP
+    rationale: "Upstream platform documentation. Keep, but flag for doc-sync after the hook/memory/security rebuilds land (post-v0.1) since it may describe surfaces that change."
+    cite: "STRATEGY.md § REBUILD-ON-NATIVE"
+    confidence: MED
+  - path: .pai-protected.json
+    unit: file
+    verdict: REBUILD
+    rationale: "Protected-paths config for PAI's custom security pipeline. STRATEGY moves security to CC-native permissions.{allow,ask,deny}; this protection concern is re-grounded there rather than a bespoke JSON consumed by validate-protected.ts."
+    cite: "STRATEGY.md § REBUILD-ON-NATIVE (SecurityPipeline); DIVERGENCE.md § Hooks (P3)"
+    confidence: MED
+  - path: Tools/validate-protected.ts
+    unit: file
+    verdict: REBUILD
+    rationale: "Validator for .pai-protected.json — part of the custom security surface that moves to CC-native permissions. Re-ground with .pai-protected.json."
+    cite: "STRATEGY.md § REBUILD-ON-NATIVE (SecurityPipeline)"
+    confidence: MED
+  - path: Tools/BackupRestore.ts
+    unit: file
+    verdict: KEEP
+    rationale: "Backup/restore utility for the PAI install; no CC-native equivalent. Keep."
+    cite: "STRATEGY.md § Design principles"
+    confidence: MED
+  - path: Tools/README.md
+    unit: file
+    verdict: KEEP
+    rationale: "Docs for Tools/; keep alongside retained tools."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: Tools/utilities-icon.png
+    unit: file
+    verdict: KEEP
+    rationale: "Asset for Tools/ docs."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: .github/FUNDING.yml
+    unit: file
+    verdict: DELETE
+    rationale: "Upstream maintainer's funding config; does not belong in Austin's fork. Low stakes."
+    cite: "STRATEGY.md § Anti-scope"
+    confidence: MED
+  - path: .github/workflows/claude-code-review.yml
+    unit: file
+    verdict: KEEP
+    rationale: "GitHub Actions Claude code-review workflow; useful CI for the fork. May need secret/repo references updated, but the surface is worth keeping."
+    cite: "STRATEGY.md § Design principles"
+    confidence: MED
+  - path: .github/workflows/claude.yml
+    unit: file
+    verdict: KEEP
+    rationale: "GitHub Actions Claude workflow; useful CI. Same caveat as claude-code-review.yml."
+    cite: "STRATEGY.md § Design principles"
+    confidence: MED
+  - path: Packs/README.md
+    unit: file
+    verdict: KEEP
+    rationale: "Index/readme for the Packs/ per-skill layout. Keep."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: Packs/pai-packs-icon.png
+    unit: file
+    verdict: KEEP
+    rationale: "Asset for Packs/ docs."
+    cite: "STRATEGY.md § Design principles"
+    confidence: HIGH
+  - path: images/
+    unit: tree
+    verdict: KEEP
+    rationale: "23 branding/doc image assets. Keep as a tree for v0.1; prune any unreferenced after the README/doc set stabilizes (post-v0.1 execution pass). Low cost, low risk."
+    cite: "STRATEGY.md § Design principles"
+    confidence: MED
