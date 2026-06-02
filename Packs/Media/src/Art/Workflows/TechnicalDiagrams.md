@@ -204,7 +204,7 @@ All the art components, labels, and such should mostly look hand-drawn, similar 
 ### Generate Command
 
 ```bash
-bun run ~/.claude/skills/art/Tools/Generate.ts \
+bun run ~/.claude/skills/Media/Art/Tools/Generate.ts \
   --model [SELECTED_MODEL] \
   --prompt "[PROMPT]" \
   --size [SELECTED_SIZE] \

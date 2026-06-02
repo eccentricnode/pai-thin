@@ -75,7 +75,7 @@ This pack is designed for AI-assisted installation. Give this directory to your 
 
 **Summary:**
 - **Subdirectories:** 2 subsystems (Art, Remotion)
-- **Art workflows:** 20 (AnnotatedScreenshots, Aphorisms, Comics, Comparisons, CreatePAIPackIcon, D3Dashboards, Essay, Frameworks, Maps, Mermaid, RecipeCards, RemoveBackground, Stats, Taxonomies, TechnicalDiagrams, Timelines, Visualize, YouTubeThumbnailChecklist, AdHocYouTubeThumbnail, BrandWallpaper)
+- **Art workflows:** 18 (AnnotatedScreenshots, Aphorisms, Comics, Comparisons, CreatePAIPackIcon, D3Dashboards, Essay, Frameworks, Maps, Mermaid, RecipeCards, RemoveBackground, Stats, Taxonomies, TechnicalDiagrams, Timelines, Visualize, YouTubeThumbnailChecklist)
 - **Remotion reference files:** 28 pattern docs
 - **Tools:** 6 TypeScript files across both subsystems
 - **Dependencies:** bun (for running TypeScript tools), API keys for image generation models
@@ -86,7 +86,7 @@ This pack is designed for AI-assisted installation. Give this directory to your 
 
 This sounds similar to using an image generation API directly, which also creates images from text. What makes this approach different?
 
-The Media skill is not just an API wrapper. It provides 20 specialized workflows that each understand the specific requirements of their output type. A blog header workflow knows about aspect ratios, text placement zones, and editorial aesthetics. A technical diagram workflow knows about architecture patterns, component layouts, and labeling. A YouTube thumbnail workflow knows about face positioning, text readability at small sizes, and click-through optimization. Each workflow applies domain-specific knowledge before any model is called, producing results that require far less iteration than raw prompting.
+The Media skill is not just an API wrapper. It provides 18 specialized workflows that each understand the specific requirements of their output type. A blog header workflow knows about aspect ratios, text placement zones, and editorial aesthetics. A technical diagram workflow knows about architecture patterns, component layouts, and labeling. A YouTube thumbnail workflow knows about face positioning, text readability at small sizes, and click-through optimization. Each workflow applies domain-specific knowledge before any model is called, producing results that require far less iteration than raw prompting.
 
 - Works with multiple generation backends (Gemini, Flux, GPT Image, Midjourney)
 - Style preferences persist across all outputs for brand consistency

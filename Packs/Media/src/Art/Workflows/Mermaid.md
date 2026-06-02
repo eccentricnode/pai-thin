@@ -646,7 +646,7 @@ Optional: Sign small in bottom right corner in charcoal (#2D2D2D).
 **Execute with optimal model for text-heavy diagrams:**
 
 ```bash
-bun run ~/.claude/skills/art/Tools/Generate.ts \
+bun run ~/.claude/skills/Media/Art/Tools/Generate.ts \
   --model nano-banana-pro \
   --prompt "[YOUR COMPREHENSIVE PROMPT]" \
   --size 2K \
@@ -669,10 +669,11 @@ GOING INTO BLOG/WEBSITE: Remove background for transparency
 **For blog/website use** — use the **Images skill** for background removal:
 
 ```bash
-bun ~/.claude/PAI/Tools/RemoveBg.ts /path/to/mermaid-diagram.png
+# Route to the Media RemoveBackground workflow for:
+# /path/to/mermaid-diagram.png
 ```
 
-**See:** `~/.claude/skills/Images/Workflows/BackgroundRemoval.md` for full documentation.
+**See:** `~/.claude/skills/Media/Art/Workflows/RemoveBackground.md` for full documentation.
 
 **Immediately open:**
 ```bash
