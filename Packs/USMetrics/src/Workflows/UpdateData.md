@@ -44,7 +44,7 @@ bun ~/.claude/skills/USMetrics/Tools/UpdateSubstrateMetrics.ts
 
 This tool:
 1. Fetches current values from all configured APIs
-2. Writes to `${PROJECTS_DIR}/Substrate/Data/US-Common-Metrics/US-Common-Metrics.md`
+2. Writes to `${USMETRICS_DATA_DIR}/US-Common-Metrics.md`
 3. Exports to `us-metrics-current.csv`
 4. Appends to `us-metrics-historical.csv` (with timestamp)
 5. Logs update status
@@ -69,6 +69,7 @@ Check the update was successful:
 ```bash
 export FRED_API_KEY="your_key"    # Required
 export EIA_API_KEY="your_key"     # Required for energy data
+export USMETRICS_DATA_DIR="/path/to/US-Common-Metrics"  # Required data directory
 ```
 
 ## Output Files

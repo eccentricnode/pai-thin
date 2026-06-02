@@ -165,7 +165,7 @@ function calculateTrend(observations: Observation[], years: number): TrendStat |
 async function fetchEIAGasPrice(): Promise<{ value: number; date: string } | null> {
   if (!EIA_API_KEY) return null;
 
-  const url = `https://api.eia.gov/v2/petroleum/pri/gnd/data/?api_key=${EIA_API_KEY}&frequency=weekly&data[0]=value&facets[product][]=EPMR&facets[duession][]=Y&sort[0][column]=period&sort[0][direction]=desc&length=1`;
+  const url = `https://api.eia.gov/v2/petroleum/pri/gnd/data/?api_key=${EIA_API_KEY}&frequency=weekly&data[0]=value&facets[product][]=EPMR&facets[duoarea][]=NUS&sort[0][column]=period&sort[0][direction]=desc&length=1`;
 
   try {
     const response = await fetch(url);

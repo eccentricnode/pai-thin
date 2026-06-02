@@ -11,11 +11,12 @@
  * Environment:
  *   FRED_API_KEY - Required for most metrics
  *   EIA_API_KEY - Required for gas prices
+ *   USMETRICS_DATA_DIR - Required path to US-Common-Metrics data files
  *
  * Output files:
- *   - ${PROJECTS_DIR}/Substrate/Data/US-Common-Metrics/US-Common-Metrics.md (updated values)
- *   - ${PROJECTS_DIR}/Substrate/Data/US-Common-Metrics/us-metrics-current.csv (current snapshot)
- *   - ${PROJECTS_DIR}/Substrate/Data/US-Common-Metrics/us-metrics-historical.csv (appended)
+ *   - ${USMETRICS_DATA_DIR}/US-Common-Metrics.md (updated values)
+ *   - ${USMETRICS_DATA_DIR}/us-metrics-current.csv (current snapshot)
+ *   - ${USMETRICS_DATA_DIR}/us-metrics-historical.csv (appended)
  */
 
 import { parseArgs } from "util";
@@ -26,7 +27,7 @@ import { join } from "path";
 // CONFIGURATION
 // ============================================================================
 
-const SUBSTRATE_PATH = join(process.env.HOME || "", "Projects/Substrate/Data/US-Common-Metrics");
+const DATA_DIR = process.env.USMETRICS_DATA_DIR || "";
 const FRED_API_KEY = process.env.FRED_API_KEY;
 const EIA_API_KEY = process.env.EIA_API_KEY;
 
@@ -286,7 +287,7 @@ async function fetchAllMetrics(): Promise<Map<string, FetchResult>> {
 // ============================================================================
 
 function updateMarkdownFile(results: Map<string, FetchResult>): string {
-  const mdPath = join(SUBSTRATE_PATH, "US-Common-Metrics.md");
+  const mdPath = join(DATA_DIR, "US-Common-Metrics.md");
   let content = readFileSync(mdPath, "utf-8");
 
   // Update the "Last Updated" timestamp
@@ -423,9 +424,10 @@ Options:
 Environment:
   FRED_API_KEY   Required for most metrics
   EIA_API_KEY    Required for gas prices
+  USMETRICS_DATA_DIR Required path to US-Common-Metrics data files
 
 Output:
-  ${PROJECTS_DIR}/Substrate/Data/US-Common-Metrics/
+  ${DATA_DIR || "USMETRICS_DATA_DIR"}/
     - US-Common-Metrics.md (updated)
     - us-metrics-current.csv (current snapshot)
     - us-metrics-historical.csv (appended)
@@ -440,16 +442,22 @@ Output:
     process.exit(1);
   }
 
-  // Verify Substrate path exists
-  if (!existsSync(SUBSTRATE_PATH)) {
-    console.error(`Error: Substrate path not found: ${SUBSTRATE_PATH}`);
+  if (!DATA_DIR) {
+    console.error("Error: USMETRICS_DATA_DIR environment variable not set");
+    console.error("Set it to the directory containing US-Common-Metrics.md");
+    process.exit(1);
+  }
+
+  // Verify data path exists
+  if (!existsSync(DATA_DIR)) {
+    console.error(`Error: data path not found: ${DATA_DIR}`);
     process.exit(1);
   }
 
   console.log("=".repeat(60));
   console.log("US-Common-Metrics Update");
   console.log("=".repeat(60));
-  console.log(`Substrate path: ${SUBSTRATE_PATH}`);
+  console.log(`Data path: ${DATA_DIR}`);
   console.log(`Timestamp: ${new Date().toISOString()}`);
   console.log("");
 
@@ -478,9 +486,9 @@ Output:
   }
 
   // Write files
-  const mdPath = join(SUBSTRATE_PATH, "US-Common-Metrics.md");
-  const currentCsvPath = join(SUBSTRATE_PATH, "us-metrics-current.csv");
-  const historicalCsvPath = join(SUBSTRATE_PATH, "us-metrics-historical.csv");
+  const mdPath = join(DATA_DIR, "US-Common-Metrics.md");
+  const currentCsvPath = join(DATA_DIR, "us-metrics-current.csv");
+  const historicalCsvPath = join(DATA_DIR, "us-metrics-historical.csv");
 
   console.log("\nWriting files...");
 
