@@ -1,6 +1,6 @@
 ---
 name: Sales
-description: "Transforms product documentation into sales-ready narrative packages combining story explanation, charcoal gestural sketch art, and talking points. Pipeline: extract narrative arc → determine emotional register (wonder, determination, hope) → derive visual scene → generate assets. Three workflows: CreateSalesPackage (full pipeline — narrative + charcoal sketch visual + key talking points), CreateNarrative (story only, 8-24 numbered points in first-person conversational voice, captures why-it-matters not what-it-does), CreateVisual (charcoal gestural sketch with transparent background for presentation versatility). Charcoal gestural sketch is the mandatory visual style — minimalist composition with breathing space. Output is tied directly to what's being sold — clear, succinct, effective. Integrates StoryExplanation (for narrative arc extraction) and Art essay-art workflow (for visual generation) internally. USE WHEN: sales, proposal, pitch deck, value proposition, sales narrative, sales deck, sales package, turn this into a pitch, create a sales story, sales materials, product pitch, transform docs to sales, sales script. NOT FOR Hormozi $100M frameworks, value equation, irresistible offer, or VOC mining (use _SALESHORMOZI). NOT FOR standalone diagrams or illustrations (use Art)."
+description: "Transforms product documentation into sales-ready narrative packages combining story explanation, charcoal gestural sketch art, and talking points. Pipeline: extract narrative arc → determine emotional register (wonder, determination, hope) → derive visual scene → generate assets. Three workflows: CreateSalesPackage (full pipeline — narrative + charcoal sketch visual + key talking points), CreateNarrative (story only, 8-24 numbered points in first-person conversational voice, captures why-it-matters not what-it-does), CreateVisual (charcoal gestural sketch with transparent background for presentation versatility). Charcoal gestural sketch is the mandatory visual style — minimalist composition with breathing space. Output is tied directly to what's being sold — clear, succinct, effective. Performs narrative arc extraction internally and uses the Art essay-art workflow for visual generation. USE WHEN: sales, proposal, pitch deck, value proposition, sales narrative, sales deck, sales package, turn this into a pitch, create a sales story, sales materials, product pitch, transform docs to sales, sales script. NOT FOR Hormozi $100M frameworks, value equation, irresistible offer, or VOC mining (use _SALESHORMOZI). NOT FOR standalone diagrams or illustrations (use Art)."
 effort: medium
 ---
 
@@ -110,7 +110,7 @@ SALES-READY OUTPUT
 ## Integration
 
 This skill combines:
-- **storyexplanation skill** - For narrative extraction
+- **Sales-specific narrative extraction** - For value-proposition story arcs
 - **art skill (essay-art workflow)** - For visual generation
 - **Sales-specific framing** - Value proposition focus
 
@@ -125,7 +125,7 @@ This skill combines:
 **Example 1: Full sales package from docs**
 ```
 User: "create a sales package for this product" [provides docs]
-→ Extracts narrative arc using storyexplanation
+→ Extracts narrative arc using Sales-specific framing
 → Determines emotional register (wonder, determination, hope)
 → Generates charcoal sketch visual + narrative + talking points
 ```

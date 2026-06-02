@@ -21,12 +21,12 @@ Takes technical documentation, product specs, or feature descriptions and produc
 - Marketing copy (to improve)
 - URL to product page
 
-### Step 2: Extract Narrative with Story Explanation
+### Step 2: Extract Narrative Arc
 
-**Use the StoryExplanation Skill:**
+**Perform narrative-arc extraction directly in this workflow:**
 
 ```
-Invoke StoryExplanation Skill with 24-item length for [input content]
+Create an 8-24 item story explanation for [input content]
 ```
 
 **Frame the analysis around:**
