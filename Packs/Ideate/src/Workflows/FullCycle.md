@@ -200,9 +200,3 @@ Each run persists to `~/.claude/PAI/MEMORY/WORK/{slug}/ideate/`. See `../SKILL.m
 ## Final Output
 
 See `../SKILL.md` § "Final Output Format" for the markdown template.
-
-## Execution Log
-
-```bash
-echo '{"ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","skill":"Ideate","workflow":"FullCycle","input":"8_WORD_SUMMARY","status":"ok|error","duration_s":SECONDS}' >> ~/.claude/PAI/MEMORY/SKILLS/execution.jsonl
-```
