@@ -43,10 +43,10 @@ agent-browser --session update-test screenshot /tmp/update-test.png
 agent-browser open https://example.com && agent-browser screenshot /tmp/oneshot-test.png
 ```
 
-### 4. Verify BrowserAgent
+### 4. Verify General-Purpose Browser Delegation
 
 ```
-Agent(subagent_type="BrowserAgent", prompt="Navigate to https://example.com. Take a snapshot. Report page title.")
+Agent(subagent_type="general-purpose", prompt="Use agent-browser CLI for browser work. Navigate to https://example.com. Take a snapshot. Report page title.")
 ```
 
 ### 5. Verify Stories and Recipes
@@ -63,7 +63,7 @@ ls ~/.claude/skills/Browser/Recipes/*.md
 # Version: 8.0.0
 # Headless: agent-browser (Rust CLI daemon, headless default)
 # One-shot: agent-browser open <url> && agent-browser screenshot <path>
-# Agents: BrowserAgent, UIReviewer (both headless agent-browser)
+# Agents: general-purpose with explicit agent-browser instructions
 # Orchestration: ReviewStories, Automate
 # Custom code: NONE
 ```

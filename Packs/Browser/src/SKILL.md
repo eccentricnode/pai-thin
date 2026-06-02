@@ -1,6 +1,6 @@
 ---
 name: Browser
-description: "Headless browser automation via agent-browser — Rust CLI daemon with persistent auth profiles for fast, scriptable, parallel browser work. Supports batch commands, network interception, device emulation, per-site profile auth (one-time headed login, headless forever after), and parallel isolated sessions via --session. Workflows: ReviewStories (fan out YAML user stories to parallel UIReviewers), Automate (load/run parameterized recipe templates), Update. Delegates to general-purpose agents with agent-browser instructions for background parallel scraping. Falls back to Interceptor if site has bot detection. USE WHEN headless browser, batch scrape, fast screenshot, dev server test, parallel browser, background automation, extract data, review stories, automate recipe, batch screenshots, scrape multiple pages in parallel. NOT FOR deploy verification or UI confirmation with real Chrome (use Interceptor). NOT FOR simple single-URL fetching (use WebFetch). NOT FOR CAPTCHA or bot-detection bypass (use BrightData or Interceptor)."
+description: "Headless browser automation via agent-browser — Rust CLI daemon with persistent auth profiles for fast, scriptable, parallel browser work. Supports batch commands, network interception, device emulation, per-site profile auth (one-time headed login, headless forever after), and parallel isolated sessions via --session. Workflows: ReviewStories (fan out YAML user stories to parallel general-purpose validators), Automate (load/run parameterized recipe templates), Update. Delegates to general-purpose agents with agent-browser instructions for background parallel scraping. Falls back to Interceptor if site has bot detection. USE WHEN headless browser, batch scrape, fast screenshot, dev server test, parallel browser, background automation, extract data, review stories, automate recipe, batch screenshots, scrape multiple pages in parallel. NOT FOR deploy verification or UI confirmation with real Chrome (use Interceptor). NOT FOR simple single-URL fetching (use WebFetch). NOT FOR CAPTCHA or bot-detection bypass (use BrightData or Interceptor)."
 version: 10.0.0
 effort: medium
 ---
@@ -165,7 +165,7 @@ Agent 2: agent-browser --session scrape2 open https://site-b.com
 
 | Trigger Words | Workflow | What It Does |
 |--------------|----------|-------------|
-| "review stories", "run stories", "ui review", "validate stories" | `Workflows/ReviewStories.md` | Fan out YAML stories to parallel UIReviewers |
+| "review stories", "run stories", "ui review", "validate stories" | `Workflows/ReviewStories.md` | Fan out YAML stories to parallel general-purpose validators |
 | "automate", "recipe", "template", or a recipe name | `Workflows/Automate.md` | Load and execute a parameterized recipe template |
 | "update", "check version" | `Workflows/Update.md` | Verify browser tools are current and working |
 
@@ -173,7 +173,7 @@ Agent 2: agent-browser --session scrape2 open https://site-b.com
 
 ## Stories — YAML User Story Validation
 
-Define user stories in YAML and validate them in parallel with UIReviewer agents.
+Define user stories in YAML and validate them in parallel with general-purpose agents that use `agent-browser`.
 
 **Directory:** `skills/Browser/Stories/`
 
@@ -202,7 +202,7 @@ Reusable Markdown templates with `{PROMPT}` injection.
 
 | Recipe | Description | Tool |
 |--------|-------------|------|
-| `SummarizePage.md` | Extract content summary | BrowserAgent |
+| `SummarizePage.md` | Extract content summary | agent-browser |
 | `ScreenshotCompare.md` | Before/after comparison | agent-browser |
 | `FormFill.md` | Fill form fields | agent-browser |
 

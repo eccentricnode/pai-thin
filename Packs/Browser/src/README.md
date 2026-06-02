@@ -30,13 +30,13 @@ agent-browser snapshot
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | Full skill documentation |
-| `Stories/` | YAML user story definitions for UIReviewer validation |
+| `Stories/` | YAML user story definitions for general-purpose validator execution |
 | `Recipes/` | Parameterized Markdown workflow templates |
-| `Workflows/ReviewStories.md` | Fan out stories to parallel UIReviewers |
+| `Workflows/ReviewStories.md` | Fan out stories to parallel general-purpose validators |
 | `Workflows/Automate.md` | Load and execute recipe templates |
 | `Workflows/Update.md` | Verify browser tools are current |
 
 ## Related
 
-- [BrowserAgent](~/.claude/agents/BrowserAgent.md) — AI-driven agent-browser automation
-- [UIReviewer](~/.claude/agents/UIReviewer.md) — Structured story validation
+- `agent-browser` — primary CLI for headless browser automation
+- Interceptor skill — fallback for real Chrome verification or bot-detection-sensitive flows

@@ -68,9 +68,8 @@ From recipe frontmatter `tool` field:
 
 | Tool Value | Execution Method |
 |-----------|-----------------|
-| `agent-browser` | Execute steps as sequential `agent-browser` Bash commands |
-| `BrowserAgent` | Spawn `Task(subagent_type="BrowserAgent", prompt=resolved_template)` |
-| `UIReviewer` | Spawn `Task(subagent_type="UIReviewer", prompt=resolved_template)` |
+| `agent-browser` | Execute steps with `agent-browser` Bash commands and current-agent reasoning |
+| `general-purpose` | Spawn `Task(subagent_type="general-purpose", prompt=browser_instructions + resolved_template)` |
 
 Default: `agent-browser` if `tool` field is missing.
 
@@ -79,20 +78,20 @@ Default: `agent-browser` if `tool` field is missing.
 Run the resolved template through the selected tool:
 
 - **agent-browser:** Parse the numbered steps into CLI commands and execute sequentially
-- **BrowserAgent/UIReviewer:** Pass the full resolved template as the agent prompt
+- **general-purpose:** Pass the full resolved template plus `agent-browser` instructions as the agent prompt
 
 ### 6. Return Results
 
 Report the execution results:
 - For `agent-browser`: command outputs, screenshot paths, any errors
-- For agents: the agent's full response including screenshots and reports
+- For `general-purpose`: the agent's full response including screenshots and reports
 
 ## Design Decisions
 
 - **Glob-based discovery.** No recipe index to maintain — just drop a `.md` file in `Recipes/`.
 - **Simple string replacement.** `{param}` → value. No Handlebars, no Jinja, no templating library. Keeps recipes readable and maintainable.
 - **Tool selection from frontmatter.** The recipe author decides the right tool at authoring time, not at runtime.
-- **Unresolved params left in place.** BrowserAgent/UIReviewer agents can handle `{param}` in their prompt and ask or infer the value. This is graceful degradation, not an error.
+- **Unresolved params left in place.** The current agent or delegated general-purpose agent can handle `{param}` in the prompt and ask or infer the value. This is graceful degradation, not an error.
 
 ## Error Handling
 

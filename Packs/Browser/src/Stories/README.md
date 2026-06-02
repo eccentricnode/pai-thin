@@ -23,7 +23,7 @@ stories:
 
 ## Key Principles
 
-1. **LLM-readable targets** — describe elements in natural language ("First story title link"), not CSS selectors (`.story-link:first-child`). UIReviewer agents use accessibility snapshots to find elements by description.
+1. **LLM-readable targets** — describe elements in natural language ("First story title link"), not CSS selectors (`.story-link:first-child`). General-purpose agents use accessibility snapshots to find elements by description.
 
 2. **One file per page/flow** — group related stories in a single YAML file. Each file targets one URL or closely related flow.
 
@@ -53,7 +53,7 @@ stories:
 
 ## Running Stories
 
-Stories are executed by the **ReviewStories** workflow, which fans each story out to a parallel UIReviewer agent:
+Stories are executed by the **ReviewStories** workflow, which fans each story out to a parallel general-purpose agent with `agent-browser` instructions:
 
 ```
 # Run all stories in a file
@@ -67,4 +67,4 @@ Stories are executed by the **ReviewStories** workflow, which fans each story ou
 
 - Use PascalCase: `HackerNews.yaml`, `ExampleApp.yaml`, `LoginFlow.yaml`
 - One file per target app or page group
-- Keep story count per file under 8 (UIReviewer parallelism limit)
+- Keep story count per file under 8 (validator parallelism limit)
