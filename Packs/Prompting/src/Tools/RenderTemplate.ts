@@ -140,7 +140,7 @@ function resolveTemplatePath(path: string): string {
   if (path.startsWith('/')) return path;
 
   // Resolve relative to Templates directory
-  const templatesDir = dirname(dirname(import.meta.path));
+  const templatesDir = resolve(dirname(dirname(import.meta.path)), 'Templates');
   return resolve(templatesDir, path);
 }
 
@@ -190,7 +190,7 @@ function registerPartials(templatesDir: string): void {
 }
 
 export function renderTemplate(options: RenderOptions): string {
-  const templatesDir = dirname(dirname(import.meta.path));
+  const templatesDir = resolve(dirname(dirname(import.meta.path)), 'Templates');
 
   // Register any partials
   registerPartials(templatesDir);

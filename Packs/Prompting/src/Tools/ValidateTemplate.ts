@@ -43,7 +43,7 @@ interface ValidateOptions {
 
 function resolveTemplatePath(path: string): string {
   if (path.startsWith('/')) return path;
-  const templatesDir = dirname(dirname(import.meta.path));
+  const templatesDir = resolve(dirname(dirname(import.meta.path)), 'Templates');
   return resolve(templatesDir, path);
 }
 
