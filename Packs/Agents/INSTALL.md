@@ -386,10 +386,6 @@ Then install dependencies:
 cd ~/.claude/skills/Agents/Tools && bun install
 ```
 
-### Agents have no voice
-
-Voice output requires a running ElevenLabs voice server at localhost:8888. Without it, agents still work -- they just produce text output without audio.
-
 ### Custom traits not appearing
 
 User customizations must be placed in:

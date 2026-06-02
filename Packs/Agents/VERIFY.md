@@ -111,9 +111,6 @@ else
   echo "  UNAVAILABLE Tool dependencies (run: cd ~/.claude/skills/Agents/Tools && bun install)"
 fi
 
-# Voice server
-curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health 2>/dev/null | grep -q "200" && echo "  AVAILABLE Voice server at localhost:8888" || echo "  UNAVAILABLE Voice server (agents work without it, text-only)"
-
 # User customizations
 if [ -d "$CLAUDE_DIR/PAI/USER/SKILLCUSTOMIZATIONS/Agents" ]; then
   echo "  AVAILABLE User customizations directory"

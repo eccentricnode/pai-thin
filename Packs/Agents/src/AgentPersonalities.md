@@ -666,12 +666,11 @@ Higher stability (0.65) creates precise, measured delivery - each word chosen de
 
 ## Usage
 
-Voice server automatically loads this configuration at startup. To update personality settings:
+If you wire a voice server downstream, it loads this configuration at startup. To update personality settings:
 
 1. Edit JSON configuration above
 2. Update character descriptions and backstories as personalities evolve
-3. Restart voice server to apply changes
-4. Test with: `curl -X POST localhost:8888/notify -H "Content-Type: application/json" -d '{"message":"Test","voice_id":"VOICE_ID"}'`
+3. Restart your voice server to apply changes
 
 ## Version History
 
