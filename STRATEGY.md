@@ -1,7 +1,7 @@
 # pai-thin — Strategy & Fork Plan
 
-**Date:** 2026-05-27 (scope locked 2026-05-28)
-**Status:** SCOPE LOCKED — P0 committed, v0.1 = audit only
+**Date:** 2026-05-27 (scope locked 2026-05-28, execution through P4 done 2026-06-02)
+**Status:** P0–P4 SHIPPED — audit + delete + per-pack fixes + Pulse/MEMORY sweep complete; P5 REBUILD pending
 **Author:** Austin (with Jeff)
 **Successor to:** This session's PAI-vs-CC audit (in conversation transcript)
 **Base:** upstream HEAD `2fde1bb` (2026-05-20), verified fresh 2026-05-28

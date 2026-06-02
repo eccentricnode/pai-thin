@@ -1,71 +1,75 @@
 # pai-thin
 
-> A thin layer on top of native Claude Code. Keeps what's unique to PAI, drops what Claude Code now does natively.
-
-**Status:** v0 — pre-implementation. STRATEGY.md is the load-bearing doc.
+> A thinner [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) for modern Claude Code — keep the unique ideas, drop what Claude Code does natively.
 
 ---
 
 ## What this is
 
-A fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) re-shaped against Claude Code's 2026 native feature surface. Same ideas, smaller surface area.
+A fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) (PAI) that audits the upstream tree against Claude Code's 2026 feature surface and removes the wrapper code for things CC now does natively.
 
-The canonical PAI repo grew up before Claude Code shipped auto-memory, the `http`/`prompt`/`agent` hook handler types, `.claude/rules/` path-scoped instructions, ~25 hook events, and persistent subagent memory. PAI scaffolded around the absence of those features. **They exist now.** pai-thin is the version that uses them.
+The original PAI repo was built before Claude Code shipped auto-memory, the `http` / `prompt` / `agent` hook handler types, `.claude/rules/` path-scoped instructions, ~25 hook events, and persistent subagent memory. PAI scaffolded around the absence of those features. **They exist now.** pai-thin is the version that leans on them.
 
-## What's different from upstream
+The deliverable so far is a *trustworthy decision catalog* — every meaningful piece of the upstream tree classified as KEEP / REBUILD / DELETE / FIX / ADD — and a slimmed-down tree that reflects the cheaper verdicts (DELETE, FIX, sweep).
 
-| Upstream PAI 5.0 | pai-thin |
+## Current state
+
+| | Done | What it produced |
+|---|---|---|
+| **P0** — fork + meta | ✓ | `STRATEGY.md`, `DIVERGENCE.md`, [`.github/UPSTREAM_SYNC.md`](./.github/UPSTREAM_SYNC.md) |
+| **P0.5** — scope lock | ✓ | v0.1 Definition of Done in STRATEGY (repo-is-deliverable, audit-only first) |
+| **P1** — audit catalog | ✓ | **[`MANIFEST.yaml`](./MANIFEST.yaml)** — 76 units classified |
+| **P2** — DELETE pass | ✓ | Dropped `Releases/` (10K archived files), `Packs/Delegation`, `.github/FUNDING.yml`. Tree: 12,380 → 1,888 files. |
+| **P3** — FIX pass | ✓ | 10 packs fixed for specific bugs the audit named (broken imports, missing fixtures, casing mismatches) |
+| **P4** — Pulse + MEMORY sweep | ✓ | Removed hardcoded `localhost:31337/notify` Pulse voice notifications (264 files) and `~/.claude/PAI/MEMORY/SKILLS/execution.jsonl` logging (38 files) |
+| **P5** — REBUILD pass | _pending_ | 8 packs + the custom-security surface need to be re-grounded on Claude Code native primitives (permissions, telemetry). Architectural; deserves its own kickoff. |
+
+Live-system migration (CLAUDE.md surgery, MEMORY.md restructure, hook pruning in `~/.claude`) is intentionally **not** in v0.1 scope — pai-thin is a repo-as-deliverable, not an in-place refactor of anyone's installed PAI. See `STRATEGY.md` § v0.1 Definition of Done.
+
+## What's actually different from upstream right now
+
+| Upstream PAI 5.0 | pai-thin (today) |
 |---|---|
-| 25+ hooks, most `type: command` spawning a fresh runtime per fire | ~5-7 hooks, mostly `type: http`/bash; matches CC native handler types |
-| Custom `MEMORY/{WORK,KNOWLEDGE,LEARNING}` parallel store + custom retrievers | CC native auto-memory (`~/.claude/projects/<proj>/memory/`), index + topic-file pattern |
-| `CLAUDE.md` + 5 `@`-imports loading ~10.9K tok at every session start | `CLAUDE.md` ≤ 100 lines + 2 `@`-imports; PROJECTS/TELOS moved to `.claude/rules/` with `paths:` frontmatter |
-| Custom security inspector pipeline | CC native `permissions.{allow,ask,deny}` + `autoMode.{hard_deny}` |
-| Custom observability JSONL + Pulse | CC native telemetry (`CLAUDE_CODE_ENABLE_TELEMETRY=1` + OTLP); Pulse retained for voice only |
-| Mode auto-detection via Sonnet classifier (25s timeouts, fragile) | Same idea, planned reliability fix in P6 |
-| Algorithm as a *mode* that auto-triggers | Algorithm as a *skill* you invoke explicitly |
-| Startup context ~22.7K tokens (~11% of window before first prompt) | Target ~12-14K tokens |
+| 12,380 tracked files (incl. ~10K in archived release snapshots) | 1,888 tracked files |
+| Most packs hardcode `curl http://localhost:31337/notify` voice notifications in `SKILL.md` and every workflow | Notifications removed — bring your own if you want them |
+| Most SKILL.md files end with a forced `~/.claude/PAI/MEMORY/SKILLS/execution.jsonl` append | Custom JSONL gone — use Claude Code native telemetry (`CLAUDE_CODE_ENABLE_TELEMETRY=1`) if you want skill-level observability |
+| 10 packs ship with known bugs the audit named (broken imports, missing fixtures) | Those 10 packs fixed |
+| `Packs/Delegation` shipped | Removed (audit verdict) |
 
-Full catalog: [DIVERGENCE.md](./DIVERGENCE.md).
+What hasn't changed *yet* (work pending in P5):
+- 8 REBUILD-class packs still contain wrapper code over Claude Code natives.
+- The custom security inspector pipeline (`.pai-protected.json`, `Tools/validate-protected.ts`) still parallels Claude Code's native `permissions.{allow,ask,deny}`.
 
 ## What's the same as upstream
 
-- Skills, subagents, ISA system, the Algorithm doctrine, Fabric integration, Interceptor, the `PAI_SYSTEM_PROMPT.md` constitutional pattern — all preserved.
-- Anything CC doesn't do natively: preserved.
+- Skills, subagents, ISA system, the Algorithm doctrine, Fabric integration, Interceptor, the `PAI_SYSTEM_PROMPT.md` constitutional pattern — preserved.
+- Anything Claude Code doesn't do natively — preserved.
 
 ## Not the same project as `pai-lite`
 
 [`eccentricnode/pai-lite`](https://github.com/eccentricnode/pai-lite) is the PAI variant for **pi.dev** as substrate (built because pi.dev doesn't have CC's hook system).
 
-**pai-thin** is the PAI variant for **modern Claude Code** as substrate (built because CC now has most of what PAI scaffolded around).
+**pai-thin** is the PAI variant for **modern Claude Code** as substrate (built because Claude Code now has most of what PAI scaffolded around).
 
 Both exist because PAI's value is in the *ideas* (memory, skills, routing, learning, the Algorithm, ISA), not in any particular implementation. Different substrates get different implementations.
 
-## Roadmap
+## How the work happened (for the curious)
 
-| Phase | Goal |
-|---|---|
-| P0 | Fork + meta (this commit) |
-| P1 | Audit catalog — every upstream file classified KEEP / REBUILD / DELETE |
-| P2 | Delete pass |
-| P3 | Native rebuild (hooks → native handler types, memory → auto-memory) |
-| P4 | CLAUDE.md surgery |
-| P5 | MEMORY.md restructure |
-| P6 | Mode classifier reliability fix |
-| P7 | Dogfood for 1 week |
-| P8 | v0.1 release |
+The audit and the FIX pass were both autonomous Ralph-style loops — one `codex exec` call per unit, fresh context each, sentinel-file resumable, orchestrator commits per iteration. Scripts and per-iteration prompts are at `scripts/` (gitignored as local mission scaffold; the *deliverable* is the manifest + the committed changes, not the rig).
 
-Full plan: [STRATEGY.md](./STRATEGY.md). Phase tracking: [issue #1](../../issues/1).
+The P4 Pulse and MEMORY sweeps were done with a Python script (`scripts/p4-sweep.py`) instead of Ralph — the patterns were copy-paste-uniform across 40 packs, so a single 100-line script produced one reviewable diff rather than 40 redundant codex iterations. Choosing the right tool per phase mattered.
 
 ## Read first
 
-- **[STRATEGY.md](./STRATEGY.md)** — the project's source of truth (audit findings, design principles, implementation plan)
-- **[DIVERGENCE.md](./DIVERGENCE.md)** — every meaningful divergence from upstream and why
-- **[.github/UPSTREAM_SYNC.md](./.github/UPSTREAM_SYNC.md)** — how to pull canonical PAI updates and triage them
-- **[UPSTREAM_README.md](./UPSTREAM_README.md)** — Daniel's original README, preserved
+- **[`MANIFEST.yaml`](./MANIFEST.yaml)** — the decision catalog. Every unit, every verdict, every rationale, every citation.
+- **[`STRATEGY.md`](./STRATEGY.md)** — design principles, v0.1 Definition of Done, full implementation plan
+- **[`DIVERGENCE.md`](./DIVERGENCE.md)** — every meaningful divergence from upstream and why
+- **[`.github/UPSTREAM_SYNC.md`](./.github/UPSTREAM_SYNC.md)** — how to pull canonical PAI updates and triage them
+- **[`UPSTREAM_README.md`](./UPSTREAM_README.md)** — Daniel's original README, preserved
 
 ## Credits
 
-Built on [Daniel Miessler](https://danielmiessler.com/)'s [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure). All credit for the original ideas — memory, skills, the Algorithm, ISA, the substrate-agnostic philosophy — goes upstream. This fork is an implementation experiment, not a critique.
+Built on [Daniel Miessler](https://danielmiessler.com/)'s [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure). All credit for the original ideas — memory, skills, the Algorithm, ISA, the substrate-agnostic philosophy — goes upstream. This fork is an implementation experiment grounded in the same ideas, not a critique.
 
 ## License
 
