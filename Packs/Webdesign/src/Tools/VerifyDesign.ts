@@ -2,12 +2,14 @@
 /*
 Usage:
   VerifyDesign.ts <url-or-path> <out-dir> [--viewport WIDTHxHEIGHT] [--a11y|--no-a11y]
+  VerifyDesign.ts --compare <before.png> <after.png> <out-dir>
 
 Runs a thin Interceptor-driven smoke check for a rendered design. The viewport is
 validated and reported, but not applied because Interceptor exposes no viewport
 verb. Accessibility checks are viewport-independent tree heuristics, not axe-core.
+Use --lighthouse to run the Lighthouse CLI when it is installed on PATH.
 */
-import { stat } from "node:fs/promises";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -28,6 +30,30 @@ type A11yResult = {
   violations: Violation[];
   pass: boolean;
 };
+type LighthouseResult = {
+  engine: "lighthouse-cli";
+  skipped?: true;
+  reason?: string;
+  report?: string;
+  scores?: Record<string, number>;
+  pass: boolean;
+};
+type NormalOptions = {
+  mode: "normal";
+  input: string;
+  outDir: string;
+  w: number;
+  h: number;
+  a11y: boolean;
+  lighthouse: boolean;
+};
+type CompareOptions = {
+  mode: "compare";
+  before: string;
+  after: string;
+  outDir: string;
+};
+type Options = NormalOptions | CompareOptions;
 
 function resolveInterceptorBin(): string {
   const found = Bun.spawnSync(["which", "interceptor"]);
@@ -90,25 +116,41 @@ function a11yFromTree(root: TreeNode): A11yResult {
   };
 }
 
-function parseArgs(): { input: string; outDir: string; w: number; h: number; a11y: boolean } {
+function usage(): string {
+  return "usage: VerifyDesign.ts <url-or-path> <out-dir> [--viewport WIDTHxHEIGHT] [--a11y|--no-a11y] [--lighthouse]\n       VerifyDesign.ts --compare <before.png> <after.png> <out-dir>";
+}
+
+function parseArgs(): Options {
   const args = Bun.argv.slice(2);
-  const input = args.shift();
-  const outDir = args.shift();
-  if (!input || !outDir) {
-    console.error("usage: VerifyDesign.ts <url-or-path> <out-dir> [--viewport WIDTHxHEIGHT] [--a11y|--no-a11y]");
-    process.exit(2);
-  }
   let viewport = "1440x900";
   let a11y = true;
+  let compare = false;
+  let lighthouse = false;
+  const positional: string[] = [];
   while (args.length) {
-    const flag = args.shift();
-    if (flag === "--viewport") viewport = args.shift() ?? "";
+    const flag = args.shift() ?? "";
+    if (flag === "--compare") compare = true;
+    else if (flag === "--viewport") viewport = args.shift() ?? "";
     else if (flag === "--a11y") a11y = true;
     else if (flag === "--no-a11y") a11y = false;
-    else {
-      console.error(`unknown flag: ${flag ?? ""}`);
+    else if (flag === "--lighthouse") lighthouse = true;
+    else if (flag.startsWith("--")) {
+      console.error(`unknown flag: ${flag}`);
+      process.exit(2);
+    } else positional.push(flag);
+  }
+  if (compare) {
+    const [before, after, outDir] = positional;
+    if (!before || !after || !outDir) {
+      console.error(usage());
       process.exit(2);
     }
+    return { mode: "compare", before, after, outDir };
+  }
+  const [input, outDir] = positional;
+  if (!input || !outDir) {
+    console.error(usage());
+    process.exit(2);
   }
   const m = /^(\d+)x(\d+)$/.exec(viewport);
   const w = m ? Number(m[1]) : 0;
@@ -117,7 +159,64 @@ function parseArgs(): { input: string; outDir: string; w: number; h: number; a11
     console.error("invalid viewport; expected WIDTHxHEIGHT with each value in [320, 7680]");
     process.exit(2);
   }
-  return { input, outDir, w, h, a11y };
+  return { mode: "normal", input, outDir, w, h, a11y, lighthouse };
+}
+
+function asImageSrc(pathOrUrl: string): string {
+  return /^https?:\/\//.test(pathOrUrl) ? pathOrUrl : pathToFileURL(resolve(pathOrUrl)).href;
+}
+
+async function commandCompare(before: string, after: string, outDir: string): Promise<number> {
+  const beforePath = resolve(before);
+  const afterPath = resolve(after);
+  const [beforeStat, afterStat] = await Promise.all([stat(beforePath).catch(() => null), stat(afterPath).catch(() => null)]);
+  if (!beforeStat || !afterStat) {
+    console.error(`compare inputs must exist: ${beforePath}, ${afterPath}`);
+    return 2;
+  }
+  const dir = resolve(outDir);
+  await mkdir(dir, { recursive: true });
+  const html = join(dir, "compare.html");
+  const result = {
+    before: beforePath,
+    after: afterPath,
+    sideBySide: html,
+    generatedAt: new Date().toISOString(),
+    pass: true,
+  };
+  await writeFile(
+    html,
+    `<!doctype html><meta charset="utf-8"><title>Design Compare</title><style>body{font:14px system-ui;margin:0}main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}img{max-width:100%;border:1px solid #ddd}h2{font-size:14px}</style><main><section><h2>Before</h2><img src="${asImageSrc(beforePath)}"></section><section><h2>After</h2><img src="${asImageSrc(afterPath)}"></section></main>\n`,
+  );
+  await writeFile(join(dir, "compare.json"), JSON.stringify(result, null, 2));
+  console.log(JSON.stringify(result, null, 2));
+  return 0;
+}
+
+async function lighthouseCheck(url: string, outDir: string): Promise<LighthouseResult> {
+  const found = Bun.spawnSync(["which", "lighthouse"]);
+  const bin = found.stdout.toString().trim();
+  if (found.exitCode !== 0 || bin.length === 0) {
+    return { engine: "lighthouse-cli", skipped: true, reason: "lighthouse CLI not found on PATH", pass: false };
+  }
+  const report = join(outDir, "lighthouse.json");
+  const result = await run(
+    [bin, url, "--output=json", `--output-path=${report}`, "--quiet", "--chrome-flags=--headless=new --no-sandbox"],
+    180_000,
+  );
+  if (result.code !== 0) {
+    return { engine: "lighthouse-cli", reason: result.stderr || "lighthouse failed", report, pass: false };
+  }
+  const raw = await readFile(report, "utf8").catch(() => "");
+  const parsed = raw ? JSON.parse(raw) : {};
+  const categories = parsed.categories ?? {};
+  const scores: Record<string, number> = {};
+  for (const [key, value] of Object.entries(categories)) {
+    const score = (value as { score?: number }).score;
+    if (typeof score === "number") scores[key] = score;
+  }
+  const pass = Object.values(scores).length > 0 && Object.values(scores).every((score) => score >= 0.9);
+  return { engine: "lighthouse-cli", report, scores, pass };
 }
 
 async function resolveUrl(input: string): Promise<{ url: string; resolvedUrl: string }> {
@@ -133,10 +232,13 @@ async function resolveUrl(input: string): Promise<{ url: string; resolvedUrl: st
 
 async function main(): Promise<void> {
   if (Bun.argv.slice(2).length === 0) {
-    console.error("usage: VerifyDesign.ts <url-or-path> <out-dir> [--viewport WIDTHxHEIGHT] [--a11y|--no-a11y]");
+    console.error(usage());
     return;
   }
   const opts = parseArgs();
+  if (opts.mode === "compare") {
+    process.exit(await commandCompare(opts.before, opts.after, opts.outDir));
+  }
   const { url, resolvedUrl } = await resolveUrl(opts.input);
   const outDir = resolve(opts.outDir);
   const made = await run(["mkdir", "-p", outDir], 5_000);
@@ -172,8 +274,10 @@ async function main(): Promise<void> {
   } else {
     a11y = { skipped: true };
   }
+  const lighthouse = opts.lighthouse ? await lighthouseCheck(resolvedUrl, outDir) : { skipped: true };
   const a11yPass = "skipped" in a11y ? true : a11y.pass;
-  const pass = screenshot !== null && a11yPass;
+  const lighthousePass = opts.lighthouse ? (lighthouse as LighthouseResult).pass : true;
+  const pass = screenshot !== null && a11yPass && lighthousePass;
   const result = {
     url,
     resolvedUrl,
@@ -181,6 +285,7 @@ async function main(): Promise<void> {
     screenshot,
     ...(screenshotError ? { screenshotError } : {}),
     a11y,
+    lighthouse,
     pass,
     timestamp,
   };

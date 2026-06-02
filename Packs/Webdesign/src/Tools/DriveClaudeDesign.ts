@@ -1,7 +1,11 @@
 #!/usr/bin/env bun
 /*
 Usage: DriveClaudeDesign.ts open | prompt "<brief>" | screenshot <out-path>
-       DriveClaudeDesign.ts export <html|pdf|pptx|canva|url> <out-dir>
+       DriveClaudeDesign.ts upload <path>
+       DriveClaudeDesign.ts adjust --property <name> [--delta <delta>|--value <value>]
+       DriveClaudeDesign.ts comment --selector <selector> --text <text>
+       DriveClaudeDesign.ts compare <before.png> <after.png> [out-dir]
+       DriveClaudeDesign.ts export <html|pdf|pptx|canva|url|tokens|bundle> <out>
        DriveClaudeDesign.ts bundle <out-dir>
 Prereqs: `interceptor` on PATH and an authenticated claude.ai session.
 Examples: DriveClaudeDesign.ts open
@@ -11,6 +15,7 @@ Thin Interceptor wrapper. UI targeting uses loud accessibility-tree heuristics.
 */
 import { mkdir, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 type TreeNode = { ref?: string; role?: string; name?: string; text?: string; contenteditable?: boolean | string; children?: TreeNode[] };
 
@@ -94,6 +99,87 @@ async function commandScreenshot(bin: string, outPath?: string): Promise<number>
   return r.code;
 }
 
+async function commandUpload(bin: string, inputPath?: string): Promise<number> {
+  if (!inputPath) {
+    console.error("usage: DriveClaudeDesign.ts upload <path>");
+    return 2;
+  }
+  const target = resolve(inputPath);
+  const exists = await stat(target).catch(() => null);
+  if (!exists) {
+    console.error(`path does not exist: ${target}`);
+    return 2;
+  }
+  const tree = await getTree(bin);
+  const uploadControl = tree.nodes.find((n) => n.ref && /upload|attach|add files?|import/i.test(labelOf(n)));
+  if (uploadControl?.ref) {
+    await run([bin, "click", uploadControl.ref], 15_000);
+    await Bun.sleep(500);
+    const withRef = await run([bin, "upload", uploadControl.ref, target], 60_000);
+    if (withRef.code === 0) return 0;
+  }
+  const direct = await run([bin, "upload", target], 60_000);
+  if (direct.stderr) console.error(direct.stderr.trim());
+  return direct.code;
+}
+
+function optionValue(args: string[], name: string): string | undefined {
+  const index = args.indexOf(name);
+  if (index === -1) return undefined;
+  return args[index + 1];
+}
+
+async function commandAdjust(bin: string, args: string[]): Promise<number> {
+  const property = optionValue(args, "--property");
+  const delta = optionValue(args, "--delta");
+  const value = optionValue(args, "--value");
+  if (!property || (!delta && !value)) {
+    console.error("usage: DriveClaudeDesign.ts adjust --property <name> [--delta <delta>|--value <value>]");
+    return 2;
+  }
+  const change = delta ? `by ${delta}` : `to ${value}`;
+  return commandPrompt(bin, `Adjust ${property} ${change}. Keep the rest of the design unchanged.`);
+}
+
+async function commandComment(bin: string, args: string[]): Promise<number> {
+  const selector = optionValue(args, "--selector");
+  const text = optionValue(args, "--text");
+  if (!selector || !text) {
+    console.error("usage: DriveClaudeDesign.ts comment --selector <selector> --text <text>");
+    return 2;
+  }
+  return commandPrompt(bin, `Apply this comment to ${selector}: ${text}`);
+}
+
+async function commandCompare(before?: string, after?: string, outDir?: string): Promise<number> {
+  if (!before || !after) {
+    console.error("usage: DriveClaudeDesign.ts compare <before.png> <after.png> [out-dir]");
+    return 2;
+  }
+  const beforePath = resolve(before);
+  const afterPath = resolve(after);
+  const [beforeStat, afterStat] = await Promise.all([stat(beforePath).catch(() => null), stat(afterPath).catch(() => null)]);
+  if (!beforeStat || !afterStat) {
+    console.error(`compare inputs must exist: ${beforePath}, ${afterPath}`);
+    return 2;
+  }
+  const dir = resolve(outDir ?? join(resolve(afterPath, ".."), "compare"));
+  await mkdir(dir, { recursive: true });
+  const report = {
+    before: beforePath,
+    after: afterPath,
+    sideBySide: join(dir, "compare.html"),
+    generatedAt: new Date().toISOString(),
+  };
+  await writeFile(
+    report.sideBySide,
+    `<!doctype html><meta charset="utf-8"><title>Claude Design Compare</title><style>body{font:14px system-ui;margin:0}main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}img{max-width:100%;border:1px solid #ddd}h2{font-size:14px}</style><main><section><h2>Before</h2><img src="${pathToFileURL(beforePath).href}"></section><section><h2>After</h2><img src="${pathToFileURL(afterPath).href}"></section></main>\n`,
+  );
+  await writeFile(join(dir, "compare.json"), JSON.stringify(report, null, 2));
+  console.log(dir);
+  return 0;
+}
+
 async function newestDownload(seconds: number, ext?: RegExp): Promise<string | null> {
   const dir = join(Bun.env.HOME ?? "", "Downloads");
   const entries = await readdir(dir, { withFileTypes: true }).catch(() => []);
@@ -111,9 +197,10 @@ async function newestDownload(seconds: number, ext?: RegExp): Promise<string | n
 }
 
 async function commandExport(bin: string, format?: string, outDir?: string): Promise<number> {
-  const allowed = ["html", "pdf", "pptx", "canva", "url"];
+  if (format === "bundle") return commandBundle(bin, outDir);
+  const allowed = ["html", "pdf", "pptx", "canva", "url", "tokens"];
   if (!format || !outDir || !allowed.includes(format)) {
-    console.error("usage: DriveClaudeDesign.ts export <html|pdf|pptx|canva|url> <out-dir>");
+    console.error("usage: DriveClaudeDesign.ts export <html|pdf|pptx|canva|url|tokens|bundle> <out>");
     return 2;
   }
   const tree = await getTree(bin);
@@ -130,14 +217,14 @@ async function commandExport(bin: string, format?: string, outDir?: string): Pro
   r = await run([bin, "click", item.ref]);
   if (r.code !== 0) return r.code;
   await Bun.sleep(3000);
-  const downloaded = await newestDownload(10);
+  const downloaded = await newestDownload(10, format === "tokens" ? /\.json$/i : undefined);
   if (!downloaded) {
     console.error("No recent download found after export.");
     return 4;
   }
-  const dir = resolve(outDir);
-  await mkdir(dir, { recursive: true });
-  const target = join(dir, basename(downloaded));
+  const requested = resolve(outDir);
+  const target = format === "tokens" && /\.json$/i.test(requested) ? requested : join(requested, basename(downloaded));
+  await mkdir(resolve(target, ".."), { recursive: true });
   await rename(downloaded, target);
   console.log(target);
   return 0;
@@ -176,17 +263,24 @@ async function commandBundle(bin: string, outDir?: string): Promise<number> {
 async function main(): Promise<void> {
   const [verb, ...args] = Bun.argv.slice(2);
   if (!verb) {
-    console.error("usage: DriveClaudeDesign.ts <open|prompt|screenshot|export|bundle> ...");
+    console.error("usage: DriveClaudeDesign.ts <open|prompt|screenshot|upload|adjust|comment|compare|export|bundle> ...");
     return;
   }
-  const bin = resolveInterceptorBin();
   let code = 2;
+  if (verb === "compare") {
+    code = await commandCompare(args[0], args[1], args[2]);
+    process.exit(code);
+  }
+  const bin = resolveInterceptorBin();
   if (verb === "open") code = await commandOpen(bin);
   else if (verb === "prompt") code = await commandPrompt(bin, args.join(" "));
   else if (verb === "screenshot") code = await commandScreenshot(bin, args[0]);
+  else if (verb === "upload") code = await commandUpload(bin, args[0]);
+  else if (verb === "adjust") code = await commandAdjust(bin, args);
+  else if (verb === "comment") code = await commandComment(bin, args);
   else if (verb === "export") code = await commandExport(bin, args[0], args[1]);
   else if (verb === "bundle") code = await commandBundle(bin, args[0]);
-  else console.error("usage: DriveClaudeDesign.ts <open|prompt|screenshot|export|bundle> ...");
+  else console.error("usage: DriveClaudeDesign.ts <open|prompt|screenshot|upload|adjust|comment|compare|export|bundle> ...");
   process.exit(code);
 }
 
