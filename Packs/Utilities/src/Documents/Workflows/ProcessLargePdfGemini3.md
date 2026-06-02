@@ -13,19 +13,6 @@ use_cases:
 
 # Process Large PDF with Gemini 3 Pro
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the ProcessLargePdfGemini3 workflow in the Documents skill to process PDF"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **ProcessLargePdfGemini3** workflow in the **Documents** skill to process PDF...
-
----
-
 ## Overview
 
 This workflow leverages Gemini 3 Pro's native multimodal capabilities to process large, complex PDFs that contain mixed content (text, images, tables, charts, diagrams). Unlike traditional PDF extraction tools that require conversion and lose context, Gemini 3 Pro processes PDFs directly as multimodal input.

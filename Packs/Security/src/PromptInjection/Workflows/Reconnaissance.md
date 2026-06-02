@@ -1,18 +1,5 @@
 # Reconnaissance - Application Discovery & Attack Surface Mapping
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the Reconnaissance workflow in the PromptInjection skill to map attack surface"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **Reconnaissance** workflow in the **PromptInjection** skill to map attack surface...
-
-**Workflow for:** Initial intelligence gathering, attack surface mapping, application analysis
-
 ## Purpose
 
 Extract comprehensive application intelligence to identify injection points, understand architecture, and map the attack surface for prompt injection testing.

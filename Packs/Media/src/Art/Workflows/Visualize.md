@@ -2,23 +2,6 @@
 
 **Intelligent multi-modal visualization combining optimal approaches based on content analysis.**
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the Visualize workflow in the Art skill to create visualizations"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **Visualize** in **Art**...
-
----
-
-Creates **ADAPTIVE VISUALIZATIONS** — analyzes content to select and orchestrate the best combination of visualization techniques, from pure data viz to mixed-media infographics to multi-panel compositions.
-
----
-
 ## Purpose
 
 The Visualize workflow is the **intelligent visualization orchestrator**. Unlike the 12 specialized workflows (which each serve specific purposes), Visualize analyzes your content and chooses the optimal visualization strategy — which may be one approach, or a sophisticated combination of multiple techniques.

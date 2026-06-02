@@ -2,33 +2,6 @@
 
 **Purpose:** Search aphorism database by theme, keyword, author, or topic to discover relevant quotes.
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the SearchAphorisms workflow in the Aphorisms skill to search quotes"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **SearchAphorisms** in **Aphorisms**...
-
----
-
-**When to Use:**
-- User wants to explore quotes on specific theme
-- User says "search aphorisms about [topic]", "find quotes on [theme]", "show me [keyword] quotes"
-- Browsing database for inspiration
-- Finding quotes before knowing exact newsletter theme
-- Discovering what's available in database
-
-**Prerequisites:**
-- Aphorism database exists at `~/.claude/skills/aphorisms/Database/aphorisms.md`
-- Search query or theme provided
-- Database Read for comprehensive search
-
----
-
 ## Workflow Steps
 
 ### Step 1: Parse Search Query

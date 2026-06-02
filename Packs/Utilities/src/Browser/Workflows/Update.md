@@ -1,20 +1,5 @@
 # Update Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the Update workflow in the Browser skill to sync capabilities"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **Update** in **Browser**...
-
----
-
-Verify browser tools are current and working.
-
 ## When to Use
 
 - After playwright-cli or Playwright releases new version

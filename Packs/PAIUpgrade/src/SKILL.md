@@ -11,35 +11,6 @@ effort: high
 
 If this directory exists, load and apply any PREFERENCES.md, configurations, or resources found there. These override default behavior. If the directory does not exist, proceed with skill defaults.
 
-## 🚨 MANDATORY: Voice Notification (REQUIRED BEFORE ANY ACTION)
-
-**You MUST send this notification BEFORE doing anything else when this skill is invoked.**
-
-1. **Send voice notification:**
-   ```bash
-   curl -s -X POST http://localhost:31337/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Running the WORKFLOWNAME workflow in the PAIUpgrade skill to ACTION"}' \
-     > /dev/null 2>&1 &
-   ```
-2. **Output text notification:**
-   ```
-   Running the **WorkflowName** workflow in the **PAIUpgrade** skill to ACTION...
-   ```
-
-# PAIUpgrade
-
-**Primary Purpose:** Generate prioritized upgrade recommendations for PAI by understanding the user's context and discovering what's new in the ecosystem.
-
-The skill runs **four parallel agent threads** that converge into personalized recommendations:
-
-- **Thread 0** — Prior-Work Audit (Algorithm, PATTERNS.yaml, hooks, skills, recent ISAs, KNOWLEDGE, feedback memory)
-- **Thread 1** — User Context (TELOS, projects, recent work, PAI state)
-- **Thread 2** — Source Collection (Anthropic, YouTube, custom sources, GitHub trending)
-- **Thread 3** — Internal Reflections (algorithm-reflections.jsonl)
-
-**Thread 0 is the guard rail against recommending what's already implemented, already researched-and-deferred, or already decided against.** Synthesis MUST filter every candidate recommendation through Thread 0's state inventory — never emit a recommendation without a Prior Status assignment.
-
 ## Workflow Routing
 
 | Workflow | Trigger | File |

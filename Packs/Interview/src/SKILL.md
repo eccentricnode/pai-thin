@@ -5,17 +5,6 @@ description: "Runs a phased conversational interview across all PAI context file
 
 # Interview — phased conversational context review + fill
 
-## 🚨 MANDATORY: Voice Notification
-
-Before running the workflow, send:
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Starting the interview. Scanning phases first."}' \
-  > /dev/null 2>&1 &
-```
-
 ## What this skill does
 
 Runs a **phased conversational interview** across every PAI context file. Phase 1 (foundational TELOS) is the core — the DA always reviews it first, even if files look "complete," because foundational context is never actually done. Only after Phase 1 does the interview move to IDEAL_STATE dimensions, preferences, and identity.
@@ -68,34 +57,6 @@ For each file:
    - `FILL mode` (<80% complete) → walk through the scanner's prompts
 3. Run the conversation loop (below)
 4. When the principal says "next" or "done with this one," move to the next Phase 1 file
-
-### Step 3 — Conversation loop (per file)
-
-**Review mode** (for Phase 1 files at ≥80%):
-1. Read the file with the Read tool.
-2. Summarize what's there to the principal in 2-3 sentences. No voice here — text only.
-3. Ask targeted review questions ONE AT A TIME:
-   - "Is <specific item> still accurate?"
-   - "Anything outdated to retire?"
-   - "Any recent thinking that belongs here but isn't captured?"
-   - "Anything you'd sharpen, reframe, or expand?"
-4. The principal answers by voice or text.
-5. If the principal wants a change, the DA writes it via Edit tool — precise old_string/new_string, preserve surrounding structure.
-6. Voice-confirm only on actual changes:
-   ```bash
-   curl -s -X POST http://localhost:31337/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Updated <FILE> — captured the refinement."}' \
-     > /dev/null 2>&1 &
-   ```
-7. Ask: "Anything else for <FILE>, or move on?"
-
-**Fill mode** (for files below 80%):
-1. Ask the first scanner prompt — one at a time, never a firehose.
-2. The principal answers (voice or typed).
-3. The DA writes the answer into the correct slot in the file — replacing TBD markers, filling empty sections, appending items.
-4. Voice-confirm what got captured.
-5. Next prompt. Repeat until done with this file or the principal says "next."
 
 ### Step 4 — Phase transitions
 

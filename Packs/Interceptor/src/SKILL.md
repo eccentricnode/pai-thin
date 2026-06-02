@@ -12,32 +12,6 @@ effort: medium
 
 If this directory exists, load and apply any PREFERENCES.md, configurations, or resources found there. These override default behavior. If the directory does not exist, proceed with skill defaults.
 
-
-## MANDATORY: Voice Notification (REQUIRED BEFORE ANY ACTION)
-
-**You MUST send this notification BEFORE doing anything else when this skill is invoked.**
-
-1. **Send voice notification**:
-   ```bash
-   curl -s -X POST http://localhost:31337/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Running the WORKFLOWNAME workflow in the Interceptor skill to ACTION"}' \
-     > /dev/null 2>&1 &
-   ```
-
-2. **Output text notification**:
-   ```
-   Running the **WorkflowName** workflow in the **Interceptor** skill to ACTION...
-   ```
-
-**This is not optional. Execute this curl command immediately upon skill invocation.**
-
-# Interceptor — Stealth Browser Automation
-
-**Tool:** `interceptor` CLI — Chrome extension that controls the real browser from the inside.
-**Repo:** https://github.com/Hacker-Valley-Media/slop-browser
-**Install:** `~/Projects/interceptor` (built from source — see `Workflows/Update.md`)
-
 ### Why Interceptor?
 
 agent-browser (the Browser skill) uses CDP — sites can detect it. Interceptor is a Chrome extension that operates through the actual browser UI. No debugger, no automation flags, no separate browser instance. You stay logged in, you pass bot detection, the agent sees what you see.

@@ -1,26 +1,5 @@
 # SyntheticDataExpansion Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the SyntheticDataExpansion workflow in the BeCreative skill to expand a seed corpus"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **SyntheticDataExpansion** in **BeCreative**...
-
----
-
-**When to use:** You have a small seed corpus (5–20 examples) and need to expand it into a diverse N-example dataset for evals, training, prompt-injection test sets, writing-style corpora, or any downstream task that benefits from variety.
-
-**Why it works:** Verbalized Sampling Multi-turn (VS-Multi) — Zhang et al. 2025, arXiv:2510.01171. The paper demonstrated that VS-Multi-generated synthetic math training data raised downstream model accuracy from 30.6% → 37.5% averaged across MATH500, OlympiadBench, and Minerva Math. Each turn samples from progressively rarer regions of the response distribution that aligned models encode but no longer surface by default.
-
-**Word choice:** Use **"confidence"** not "probability" in the prompts. Paper §H.3 found this elicitation word outperforms "probability" specifically for VS-Multi.
-
----
-
 ## Inputs
 
 - **Seed corpus** — 5–20 anchor examples, paste in full

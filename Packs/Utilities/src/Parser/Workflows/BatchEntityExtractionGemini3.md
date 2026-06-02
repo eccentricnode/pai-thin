@@ -1,16 +1,5 @@
 # Batch Entity Extraction with Gemini 3 Pro
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the BatchEntityExtractionGemini3 workflow in the Parser skill to extract entities"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **BatchEntityExtractionGemini3** workflow in the **Parser** skill to extract entities...
-
 ## Purpose
 
 Extract structured entities from multiple URLs in a single batch request using Gemini 3 Pro's 1M context window for better entity recognition, relationship extraction, and cross-article entity resolution.

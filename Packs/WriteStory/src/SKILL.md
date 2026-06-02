@@ -4,31 +4,6 @@ description: "Constructs fiction across seven simultaneous narrative layers (Mea
 effort: high
 ---
 
-## 🚨 MANDATORY: Voice Notification (REQUIRED BEFORE ANY ACTION)
-
-**You MUST send this notification BEFORE doing anything else when this skill is invoked.**
-
-1. **Send voice notification**:
-   ```bash
-   curl -s -X POST http://localhost:31337/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Running the WORKFLOWNAME workflow in the WriteStory skill to ACTION"}' \
-     > /dev/null 2>&1 &
-   ```
-
-2. **Output text notification**:
-   ```
-   Running the **WorkflowName** workflow in the **WriteStory** skill to ACTION...
-   ```
-
-**This is not optional. Execute this curl command immediately upon skill invocation.**
-
-# WriteStory
-
-**Voice:** `PAI/USER/WRITINGSTYLE.md` | **AI patterns:** `PAI/USER/AI_WRITING_PATTERNS.md`
-
-Layered fiction writing system that constructs stories across seven simultaneous narrative dimensions, powered by Will Storr's *The Science of Storytelling* and Mark Forsyth's *The Elements of Eloquence*.
-
 ## Customization
 
 **Before executing, check for user customizations at:**

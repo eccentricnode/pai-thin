@@ -1,26 +1,5 @@
 # Browser Extension Security Analysis Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the ExtractBrowserExtension workflow in the Parser skill to analyze extensions"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **ExtractBrowserExtension** workflow in the **Parser** skill to analyze browser extensions...
-
-**Purpose:** Analyze browser extensions for security risks, clone detection, and malicious patterns
-
-**When to Use:**
-- Security assessment of unknown extensions
-- Incident response involving browser-based malware
-- Vetting extensions before enterprise deployment
-- Analyzing suspicious "Click Fix" or "Crash Fix" style attacks
-
----
-
 ## Extraction Steps
 
 ### 1. Extension Acquisition

@@ -2,32 +2,6 @@
 
 **Purpose:** Add new aphorism to the database with proper metadata, theme tagging, and organization.
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the AddAphorism workflow in the Aphorisms skill to add quotes"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **AddAphorism** in **Aphorisms**...
-
----
-
-**When to Use:**
-- User provides a quote to add to collection
-- User says "add this quote", "save this aphorism", "add to database"
-- Found great quote during research that should be preserved
-- After research-thinker.md discovers quotes worth adding
-
-**Prerequisites:**
-- Aphorism database exists at `~/.claude/skills/aphorisms/Database/aphorisms.md`
-- Quote text and author provided (or discoverable through research)
-- Database is Read first to check for duplicates
-
----
-
 ## Workflow Steps
 
 ### Step 1: Parse Input

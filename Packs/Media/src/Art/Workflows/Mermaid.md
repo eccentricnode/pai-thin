@@ -2,23 +2,6 @@
 
 **Hand-drawn technical diagrams combining Mermaid structure with Excalidraw sketchy aesthetic and brand color scheme.**
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the Mermaid workflow in the Art skill to create diagrams"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **Mermaid** in **Art**...
-
----
-
-Creates **EXCALIDRAW-STYLE MERMAID DIAGRAMS** — flowcharts, sequence diagrams, state machines, and other technical diagrams with whiteboard hand-drawn feel, derived from content via story explanation.
-
----
-
 ## Purpose
 
 The Mermaid workflow creates structured technical diagrams (like Mermaid.js generates) but with a **hand-drawn whiteboard aesthetic** (like Excalidraw) while maintaining **brand editorial color scheme**. Unlike generic technical diagrams, these follow specific diagram grammar (flowcharts, sequences, states, etc.) and are derived from content analysis, not hand-specified.

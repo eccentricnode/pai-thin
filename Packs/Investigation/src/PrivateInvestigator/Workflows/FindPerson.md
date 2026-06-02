@@ -1,31 +1,5 @@
 # Find Person - Complete Investigation Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the FindPerson workflow in the PrivateInvestigator skill to locate individuals"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **FindPerson** workflow in the **PrivateInvestigator** skill to locate individuals...
-
-**Purpose:** Systematically locate a person using all available public data sources
-
-**When to Use:**
-- User wants to find a specific person by name
-- User wants to reconnect with an old friend, classmate, or contact
-- User needs to locate someone for legitimate purposes
-- Comprehensive people search is required
-
-**Prerequisites:**
-- Subject's name (ideally full name)
-- Any additional context (location, age, workplace, school, how they know them)
-- Legitimate purpose for the search
-
----
-
 ## Workflow Steps
 
 ### Step 1: Gather Initial Information

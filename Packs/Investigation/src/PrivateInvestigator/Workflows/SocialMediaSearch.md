@@ -1,32 +1,5 @@
 # Social Media Search Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the SocialMediaSearch workflow in the PrivateInvestigator skill to find profiles"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **SocialMediaSearch** workflow in the **PrivateInvestigator** skill to find profiles...
-
-**Purpose:** Systematically search social media platforms to find a person's online presence
-
-**When to Use:**
-- User specifically wants to find someone's social media accounts
-- Main investigation needs social media component
-- User wants to verify someone's online presence
-- Cross-platform correlation is needed
-
-**Prerequisites:**
-- Subject's full name
-- Any known usernames, handles, or email addresses
-- Location and/or age for filtering
-- Context (profession, interests) for verification
-
----
-
 ## Workflow Steps
 
 ### Step 1: LinkedIn Search (Professional Presence)

@@ -1,29 +1,5 @@
 # Adversarial Validation Pattern (Battle of Bots)
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the AdversarialValidation workflow in the RedTeam skill to validate decisions"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **AdversarialValidation** workflow in the **RedTeam** skill to validate decisions...
-
-**Purpose:** Use competing agents + critic to produce superior synthesis through adversarial refinement.
-
-**When to Use:**
-- Feature specifications that need stress-testing
-- Architectural decisions before implementation
-- Code reviews where multiple approaches exist
-- Content that needs to withstand scrutiny
-- Any output where quality matters more than speed
-
-**Source:** Network Chuck prompting video (2025) - "AI is normally better at critiquing or editing than original writing"
-
----
-
 ## The Three-Round Protocol
 
 ### Round 1: Competing Proposals

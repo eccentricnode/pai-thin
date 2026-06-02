@@ -2,32 +2,6 @@
 
 **Purpose:** Analyze newsletter or article content to recommend the perfect thematically-aligned aphorism from the database.
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the FindAphorism workflow in the Aphorisms skill to find quotes"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **FindAphorism** in **Aphorisms**...
-
----
-
-**When to Use:**
-- User provides newsletter draft or URL and requests aphorism
-- User describes newsletter theme and wants quote recommendation
-- User says "find aphorism for this", "what quote fits this", "suggest quote"
-- Working on newsletter and needs opening/closing wisdom quote
-
-**Prerequisites:**
-- Aphorism database exists at `~/.claude/skills/aphorisms/Database/aphorisms.md`
-- Newsletter content or URL provided by user
-- Clear understanding of newsletter theme (if not provided, extract from content)
-
----
-
 ## Workflow Steps
 
 ### Step 1: Get Newsletter Content

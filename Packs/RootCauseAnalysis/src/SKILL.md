@@ -12,34 +12,6 @@ context: fork
 
 If this directory exists, load and apply any `PREFERENCES.md`, configurations, or resources found there. These override default behavior. If the directory does not exist, proceed with skill defaults.
 
-
-## MANDATORY: Voice Notification (REQUIRED BEFORE ANY ACTION)
-
-**You MUST send this notification BEFORE doing anything else when this skill is invoked.**
-
-1. **Send voice notification:**
-   ```bash
-   curl -s -X POST http://localhost:31337/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Running the WORKFLOWNAME workflow in the RootCauseAnalysis skill to ACTION"}' \
-     > /dev/null 2>&1 &
-   ```
-
-2. **Output text notification:**
-   ```
-   Running the **WorkflowName** workflow in the **RootCauseAnalysis** skill to ACTION...
-   ```
-
-**This is not optional. Execute this curl command immediately upon skill invocation.**
-
----
-
-# RootCauseAnalysis Skill
-
-Structured investigation of *why* something failed — beyond the proximate cause, down to the contributing factors and latent conditions that actually made the failure possible. Grounded in Toyota Production System (Sakichi Toyoda), Kaoru Ishikawa, James Reason's Swiss Cheese model, Dean Gano's Apollo method, and Google SRE / Etsy blameless-postmortem culture.
-
-The goal is not to find "the" root cause — that framing is almost always wrong. The goal is to identify **contributing factors** that are **actionable**. A good RCA ends with changes that prevent a class of failure, not just the specific incident.
-
 ## Core Concept
 
 Five axioms this skill operates on:

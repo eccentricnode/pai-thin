@@ -1,22 +1,5 @@
 # Twitter/X Thread Extraction Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the ExtractTwitter workflow in the Parser skill to parse tweets"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **ExtractTwitter** workflow in the **Parser** skill to parse tweets...
-
-**Purpose:** Extract tweets, threads, and metadata from Twitter/X
-
-**When to Use:** Content type detected as "tweet_thread" from twitter.com or x.com domains
-
----
-
 ## Extraction Steps
 
 ### 1. Thread Detection and Fetching

@@ -1,31 +1,5 @@
 # Reverse Lookup Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the ReverseLookup workflow in the PrivateInvestigator skill to trace identifiers"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **ReverseLookup** workflow in the **PrivateInvestigator** skill to trace identifiers...
-
-**Purpose:** Identify a person from partial information (phone, email, image, username)
-
-**When to Use:**
-- User has a phone number and wants to know who it belongs to
-- User has an email and wants to find the person
-- User has a photo and wants to identify the person
-- User has a username and wants to find the real identity
-- Any "reverse" search scenario
-
-**Prerequisites:**
-- At least one identifier (phone, email, image, username)
-- Legitimate purpose for the search
-
----
-
 ## Reverse Phone Lookup
 
 ### Step 1: Free Phone Lookup Services

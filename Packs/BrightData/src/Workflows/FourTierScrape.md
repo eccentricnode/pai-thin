@@ -1,35 +1,5 @@
 # Four-Tier URL Content Scraping
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the FourTierScrape workflow in the BrightData skill to scrape URL content"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **FourTierScrape** in **BrightData**...
-
----
-
-**Purpose:** Progressive escalation strategy to retrieve URL content using four fallback tiers
-
-**When to Use:**
-- User requests scraping or fetching content from any URL
-- Standard methods are failing or blocked
-- Site has bot detection or access restrictions
-- Need reliable content extraction in markdown format
-
-**Prerequisites:**
-- URL to scrape (provided by user)
-- WebFetch tool (built-in)
-- Bash tool for curl commands
-- Browser automation capability (agent-browser — Playwright is banned)
-- Bright Data MCP available
-
----
-
 ## Workflow Steps
 
 ### Step 1: Tier 1 - WebFetch (Fast & Simple)

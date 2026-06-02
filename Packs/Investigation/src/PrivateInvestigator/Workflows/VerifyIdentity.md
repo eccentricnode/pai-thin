@@ -1,31 +1,5 @@
 # Verify Identity Workflow
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the VerifyIdentity workflow in the PrivateInvestigator skill to confirm identity"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **VerifyIdentity** workflow in the **PrivateInvestigator** skill to confirm identity...
-
-**Purpose:** Confirm that discovered information belongs to the correct person
-
-**When to Use:**
-- User has common name problem (multiple possible matches)
-- User wants to verify findings before making contact
-- User needs confidence assessment on investigation results
-- Multiple candidates need to be narrowed down
-
-**Prerequisites:**
-- Initial investigation completed
-- One or more potential matches identified
-- Original subject profile for comparison
-
----
-
 ## Workflow Steps
 
 ### Step 1: Establish Verification Criteria

@@ -10,34 +10,11 @@ description: Read, write, convert, and analyze documents — routes to PDF, DOCX
 
 If this directory exists, load and apply any PREFERENCES.md, configurations, or resources found there. These override default behavior. If the directory does not exist, proceed with skill defaults.
 
-
-## 🚨 MANDATORY: Voice Notification (REQUIRED BEFORE ANY ACTION)
-
-**You MUST send this notification BEFORE doing anything else when this skill is invoked.**
-
-1. **Send voice notification**:
-   ```bash
-   curl -s -X POST http://localhost:8888/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Running the WORKFLOWNAME workflow in the Documents skill to ACTION"}' \
-     > /dev/null 2>&1 &
-   ```
-
-2. **Output text notification**:
-   ```
-   Running the **WorkflowName** workflow in the **Documents** skill to ACTION...
-   ```
-
-**This is not optional. Execute this curl command immediately upon skill invocation.**
-
-# Documents Skill
-
 ## 🎯 Load Full PAI Context
 
 **Before starting any task with this skill, load complete PAI context:**
 
 `read ~/.claude/PAI/SKILL.md`
-
 
 ## When to Activate This Skill
 
@@ -103,7 +80,6 @@ This skill organizes document processing across 4 document types plus specialize
 - A4 format with Playwright for pixel-perfect PDF output
 
 **Reference Implementation:** Quorum Cyber assessment at `/path/to/reference/generate-pdf.mjs`
-
 
 ### Word Documents (DOCX)
 

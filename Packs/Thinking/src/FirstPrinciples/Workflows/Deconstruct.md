@@ -2,27 +2,6 @@
 
 **Purpose**: Break down any problem, system, or concept into its fundamental constituent parts and irreducible truths.
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the Deconstruct workflow in the FirstPrinciples skill to break down components"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **Deconstruct** workflow in the **FirstPrinciples** skill to break down components...
-
----
-
-**When to Use**:
-- Starting any first principles analysis
-- When a problem seems intractable
-- When costs/complexity seem fixed
-- When inherited solutions feel wrong but you can't articulate why
-
----
-
 ## Process
 
 ### Step 1: Identify the Subject

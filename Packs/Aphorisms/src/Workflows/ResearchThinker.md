@@ -2,32 +2,6 @@
 
 **Purpose:** Deep research on specific philosopher/thinker to discover relevant aphorisms aligned with TELOS philosophy, then add to database.
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:31337/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the ResearchThinker workflow in the Aphorisms skill to research quotes"}' \
-  > /dev/null 2>&1 &
-```
-
-Running **ResearchThinker** in **Aphorisms**...
-
----
-
-**When to Use:**
-- User requests research on specific thinker (Hitchens, Deutsch, Harris, Spinoza, Feynman)
-- User says "research [thinker] quotes", "find [author] aphorisms", "what did [thinker] say about [topic]"
-- Need to expand database with quotes from key philosophers
-- Building out thinker sections in database
-
-**Prerequisites:**
-- Aphorism database exists at `~/.claude/skills/aphorisms/Database/aphorisms.md`
-- Clear understanding of which thinker to research
-- Optional: specific theme/topic to focus research on
-
----
-
 ## Workflow Steps
 
 ### Step 1: Identify Research Target

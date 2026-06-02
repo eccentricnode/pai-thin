@@ -1,18 +1,5 @@
 # Indirect Injection Testing - External Data Source Attacks
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the IndirectInjectionTesting workflow in the PromptInjection skill to test data sources"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **IndirectInjectionTesting** workflow in the **PromptInjection** skill to test data sources...
-
-**Workflow for:** Testing prompt injection via external data sources that the AI processes
-
 ## Purpose
 
 Test prompt injection attacks delivered through external data sources (documents, web pages, APIs) that are processed by the AI system, particularly dangerous for RAG systems and web-enabled AI agents.

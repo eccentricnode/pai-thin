@@ -2,27 +2,6 @@
 
 **Purpose**: Build an optimal solution from scratch using only the fundamental truths and hard constraints identified through Deconstruct and Challenge.
 
-## Voice Notification
-
-```bash
-curl -s -X POST http://localhost:8888/notify \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Running the Reconstruct workflow in the FirstPrinciples skill to build optimal solution"}' \
-  > /dev/null 2>&1 &
-```
-
-Running the **Reconstruct** workflow in the **FirstPrinciples** skill to build optimal solution...
-
----
-
-**When to Use**:
-- After completing Deconstruct and Challenge workflows
-- When existing solutions are clearly suboptimal
-- When you need to escape local maxima
-- To generate innovative alternatives to conventional approaches
-
----
-
 ## Core Principle
 
 > "If we knew nothing about how this is currently done, and only knew the fundamental truths, what would we build?"

@@ -10,30 +10,6 @@ description: Scaffold new PAI skills with proper YAML front matter, TitleCase na
 
 If this directory exists, load and apply any PREFERENCES.md, configurations, or resources found there. These override default behavior. If the directory does not exist, proceed with skill defaults.
 
-
-## 🚨 MANDATORY: Voice Notification (REQUIRED BEFORE ANY ACTION)
-
-**You MUST send this notification BEFORE doing anything else when this skill is invoked.**
-
-1. **Send voice notification**:
-   ```bash
-   curl -s -X POST http://localhost:8888/notify \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Running the WORKFLOWNAME workflow in the CreateSkill skill to ACTION"}' \
-     > /dev/null 2>&1 &
-   ```
-
-2. **Output text notification**:
-   ```
-   Running the **WorkflowName** workflow in the **CreateSkill** skill to ACTION...
-   ```
-
-**This is not optional. Execute this curl command immediately upon skill invocation.**
-
-# CreateSkill
-
-MANDATORY skill creation framework for ALL skill creation requests.
-
 ## Authoritative Source
 
 **Before creating ANY skill, READ:** `~/.claude/PAI/SkillSystem.md`
@@ -221,7 +197,6 @@ Brief description.
 **See:** `~/.claude/PAI/SkillSystem.md` (Dynamic Loading Pattern section)
 
 ---
-
 
 ## Workflow Routing
 
