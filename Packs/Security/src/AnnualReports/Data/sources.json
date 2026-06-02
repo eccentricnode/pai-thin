@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "source": "https://github.com/jacobdjwilson/awesome-annual-security-reports",
+    "lastUpdated": "2026-06-01",
+    "totalReports": 2
+  },
+  "categories": {
+    "analysis": {
+      "global_threat_intelligence": [
+        {
+          "vendor": "CrowdStrike",
+          "name": "Global Threat Report",
+          "url": "https://www.crowdstrike.com/global-threat-report/"
+        }
+      ],
+      "regional_assessments": [],
+      "sector_specific_intelligence": [],
+      "application_security": [],
+      "cloud_security": [],
+      "vulnerabilities": [],
+      "ransomware": [],
+      "data_breaches": [
+        {
+          "vendor": "Verizon",
+          "name": "Data Breach Investigations Report",
+          "url": "https://www.verizon.com/business/resources/reports/dbir/"
+        }
+      ],
+      "physical_security": [],
+      "ai_and_emerging_technologies": []
+    },
+    "survey": {
+      "industry_trends": [],
+      "executive_perspectives": [],
+      "workforce_and_culture": [],
+      "market_and_investment_research": [],
+      "application_security": [],
+      "cloud_security": [],
+      "identity_security": [],
+      "penetration_testing": [],
+      "privacy_and_data_protection": [],
+      "ransomware": [],
+      "ai_and_emerging_technologies": []
+    }
+  }
+}
