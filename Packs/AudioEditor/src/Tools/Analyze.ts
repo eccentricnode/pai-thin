@@ -11,8 +11,43 @@
  * Output: JSON edit decision list at <transcript>.edits.json
  */
 
-import { existsSync } from "fs";
-import { inference } from "../../../PAI/TOOLS/Inference.ts";
+import { existsSync, readFileSync } from "fs";
+import { homedir } from "os";
+import { resolve } from "path";
+
+// ============================================================================
+// Environment Loading - keys from ~/.claude/.env
+// ============================================================================
+
+function loadEnv(): void {
+  const envPath = process.env.PAI_CONFIG_DIR
+    ? resolve(process.env.PAI_CONFIG_DIR, ".env")
+    : resolve(homedir(), ".claude/.env");
+  try {
+    const content = readFileSync(envPath, "utf-8");
+    for (const line of content.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIndex = trimmed.indexOf("=");
+      if (eqIndex === -1) continue;
+      const key = trimmed.slice(0, eqIndex).trim();
+      let value = trimmed.slice(eqIndex + 1).trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      if (!process.env[key]) {
+        process.env[key] = value;
+      }
+    }
+  } catch {
+    // Silently continue if .env doesn't exist
+  }
+}
+
+loadEnv();
 
 interface Chunk {
   text: string;
@@ -41,6 +76,12 @@ if (!inputFile) {
 
 if (!existsSync(inputFile)) {
   console.error(`File not found: ${inputFile}`);
+  process.exit(1);
+}
+
+const apiKey = process.env.ANTHROPIC_API_KEY;
+if (!apiKey) {
+  console.error("ANTHROPIC_API_KEY not found. Set it in ~/.claude/.env");
   process.exit(1);
 }
 
@@ -192,19 +233,34 @@ for (let windowStart = 0; windowStart < chunks.length; windowStart += WINDOW_SIZ
   );
 
   try {
-    const result = await inference({
-      systemPrompt,
-      userPrompt: `Analyze this transcript section and return the JSON array of edits:\n\n${windowText}`,
-      level: "standard",
-      timeout: 120_000,
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: [
+          {
+            role: "user",
+            content: `Analyze this transcript section and return the JSON array of edits:\n\n${windowText}`,
+          },
+        ],
+      }),
     });
 
-    if (!result.success) {
-      console.error(`\n  Inference error: ${result.error}`);
+    if (!response.ok) {
+      const err = await response.text();
+      console.error(`\n  API error: ${response.status} ${err}`);
       continue;
     }
 
-    const text = result.output || "[]";
+    const data = (await response.json()) as any;
+    const text = data.content?.[0]?.text || "[]";
 
     let edits: EditDecision[];
     try {
