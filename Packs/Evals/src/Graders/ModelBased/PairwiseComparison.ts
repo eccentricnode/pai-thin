@@ -5,7 +5,7 @@
 
 import { BaseGrader, registerGrader, type GraderContext } from '../Base.ts';
 import type { GraderConfig, GraderResult, PairwiseComparisonParams } from '../../Types/index.ts';
-import { inference, type InferenceLevel } from '../../../../PAI/TOOLS/Inference.ts';
+import { modelCall, type InferenceLevel } from '../../Tools/ModelCall.ts';
 import { readFileSync, existsSync } from 'fs';
 
 export class PairwiseComparisonGrader extends BaseGrader {
@@ -126,7 +126,7 @@ ${outputB}
 Compare these outputs and determine which is better.`;
 
     try {
-      const result = await inference({
+      const result = await modelCall({
         systemPrompt,
         userPrompt,
         level,

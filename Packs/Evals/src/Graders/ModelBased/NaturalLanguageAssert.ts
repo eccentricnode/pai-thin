@@ -5,7 +5,7 @@
 
 import { BaseGrader, registerGrader, type GraderContext } from '../Base.ts';
 import type { GraderConfig, GraderResult, NaturalLanguageAssertParams } from '../../Types/index.ts';
-import { inference, type InferenceLevel } from '../../../../PAI/TOOLS/Inference.ts';
+import { modelCall, type InferenceLevel } from '../../Tools/ModelCall.ts';
 
 export class NaturalLanguageAssertGrader extends BaseGrader {
   type = 'natural_language_assert' as const;
@@ -56,7 +56,7 @@ ${params.assertions.map((a, i) => `${i + 1}. ${a}`).join('\n')}
 Check each assertion against the output and tool calls.`;
 
     try {
-      const result = await inference({
+      const result = await modelCall({
         systemPrompt,
         userPrompt,
         level,

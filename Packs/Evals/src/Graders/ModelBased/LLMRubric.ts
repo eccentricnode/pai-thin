@@ -5,7 +5,7 @@
 
 import { BaseGrader, registerGrader, type GraderContext } from '../Base.ts';
 import type { GraderConfig, GraderResult, LLMRubricParams } from '../../Types/index.ts';
-import { inference, type InferenceLevel } from '../../../../PAI/TOOLS/Inference.ts';
+import { modelCall, type InferenceLevel } from '../../Tools/ModelCall.ts';
 import { readFileSync, existsSync } from 'fs';
 
 export class LLMRubricGrader extends BaseGrader {
@@ -38,7 +38,7 @@ export class LLMRubricGrader extends BaseGrader {
     const userPrompt = this.buildUserPrompt(rubric, params.assertions, context);
 
     try {
-      const result = await inference({
+      const result = await modelCall({
         systemPrompt,
         userPrompt,
         level,

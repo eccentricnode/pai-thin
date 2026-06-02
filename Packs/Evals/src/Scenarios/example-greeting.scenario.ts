@@ -2,7 +2,7 @@
  * example-greeting.scenario.ts
  *
  * Minimum-viable scenario demonstrating PAIAgentAdapter + scenario.userSimulatorAgent
- * + scenario.judgeAgent. The "agent under test" is a plain PAI-Inference call.
+ * + scenario.judgeAgent. The "agent under test" uses the local Evals model-call primitive.
  *
  * Run:
  *   bun skills/Evals/Tools/ScenarioRunner.ts --scenario skills/Evals/Scenarios/example-greeting.scenario.ts
@@ -10,9 +10,8 @@
  * *** API KEY BILLING WARNING ***
  * @langwatch/scenario userSimulatorAgent and judgeAgent use @ai-sdk/anthropic
  * which bills ANTHROPIC_API_KEY directly, NOT the subscription. Running a
- * scenario consumes API credit. The agent-under-test (PAIAgentAdapter) still
- * routes through Inference.ts subscription — only the sim + judge billing is
- * the API. Set EVALS_ALLOW_API_BILLING=1 to acknowledge and run.
+ * scenario consumes API credit, including the agent-under-test path.
+ * Set EVALS_ALLOW_API_BILLING=1 to acknowledge and run.
  */
 
 import { anthropic } from '@ai-sdk/anthropic';

@@ -1,13 +1,11 @@
 #!/usr/bin/env bun
 /**
- * PAIAgentAdapter — wraps PAI's Inference.ts as a scenario AgentAdapter.
+ * PAIAgentAdapter — wraps the local Evals model-call primitive as a scenario AgentAdapter.
  *
  * Lets scenario.run() drive a PAI agent in multi-turn simulations without
- * pulling in the ai-sdk Anthropic provider for the agent-under-test path
- * (scenario's UserSimulatorAgent + JudgeAgent still use ai-sdk directly).
  */
 
-import { inference, type InferenceLevel } from '../../../PAI/TOOLS/Inference.ts';
+import { modelCall, type InferenceLevel } from './ModelCall.ts';
 import { AgentAdapter, AgentRole, type AgentInput, type AgentReturnTypes } from '@langwatch/scenario';
 
 export interface PAIAgentAdapterOptions {
@@ -35,7 +33,7 @@ export class PAIAgentAdapter extends AgentAdapter {
   override async call(input: AgentInput): Promise<AgentReturnTypes> {
     const userPrompt = this.renderMessages(input.messages);
 
-    const result = await inference({
+    const result = await modelCall({
       systemPrompt: this.opts.systemPrompt,
       userPrompt,
       level: this.opts.level,
@@ -43,7 +41,7 @@ export class PAIAgentAdapter extends AgentAdapter {
     });
 
     if (!result.success) {
-      throw new Error(`PAIAgentAdapter inference failed: ${result.error ?? 'unknown error'}`);
+      throw new Error(`PAIAgentAdapter model call failed: ${result.error ?? 'unknown error'}`);
     }
 
     return result.output.trim();
