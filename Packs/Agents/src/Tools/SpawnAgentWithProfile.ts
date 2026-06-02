@@ -7,7 +7,7 @@
  * Generates enriched prompts for the Task tool.
  */
 
-import AgentProfileLoader from "./AgentProfileLoader";
+import { AgentContextLoader } from "./LoadAgentContext";
 
 export interface SpawnAgentOptions {
   agentType: string;
@@ -30,17 +30,13 @@ export interface AgentPrompt {
 export async function generateAgentPrompt(
   options: SpawnAgentOptions
 ): Promise<AgentPrompt> {
-  const loader = new AgentProfileLoader();
+  const loader = new AgentContextLoader();
 
-  // Load the profile
-  const loaded = await loader.loadProfile(
-    options.agentType,
-    options.taskDescription,
-    options.projectPath
-  );
+  // Load the agent context
+  const loaded = loader.generateEnrichedPrompt(options.agentType, options.taskDescription);
 
   // Use profile's model preference if not overridden
-  const model = options.model || loaded.profile.modelPreference || "sonnet";
+  const model = options.model || loaded.model || "sonnet";
 
   // Generate description if not provided
   const description =
@@ -48,7 +44,7 @@ export async function generateAgentPrompt(
     `${options.agentType}: ${options.taskDescription.substring(0, 50)}...`;
 
   return {
-    prompt: loaded.fullPrompt,
+    prompt: loaded.prompt,
     model,
     description,
   };
@@ -63,8 +59,8 @@ if (import.meta.main) {
     console.log("\nExample:");
     console.log('  bun run SpawnAgentWithProfile.ts Architect "Design REST API" ~/Projects/MyApp');
     console.log("\nAvailable profiles:");
-    const loader = new AgentProfileLoader();
-    const profiles = loader.getAvailableProfiles();
+    const loader = new AgentContextLoader();
+    const profiles = loader.getAvailableAgents();
     profiles.forEach((p) => console.log(`  - ${p}`));
     process.exit(1);
   }
